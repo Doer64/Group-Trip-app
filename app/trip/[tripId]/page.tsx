@@ -2,14 +2,15 @@
 
 import React from 'react';
 import { useParams } from 'next/navigation';
-import { Loader2, AlertCircle } from 'lucide-react';
+import Link from 'next/link';
+import { Loader2, AlertCircle, Compass, ShieldX } from 'lucide-react';
 import { useTrip } from '@/hooks/useTrip';
 import { useAttractions } from '@/hooks/useAttractions';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
 import { TripHeader } from '@/components/trip/TripHeader';
 import { PlacesSearchBar } from '@/components/trip/PlacesSearchBar';
 import { AttractionList } from '@/components/trip/AttractionList';
-import { JoinTripForm } from '@/components/trip/JoinTripForm';
+import { Button } from '@/components/ui/Button';
 
 export default function TripBoardPage() {
   const params = useParams();
@@ -34,15 +35,28 @@ export default function TripBoardPage() {
     );
   }
 
-  // If user is not a member (403 forbidden)
-  if (tripError && tripError.includes('not a member')) {
+  // If user is not a member (403 forbidden) or not authenticated (401)
+  if (tripError && (tripError.includes('not a member') || tripError.includes('UNAUTHORIZED') || tripError.includes('Unauthorized'))) {
     return (
       <div className="py-12 flex items-center justify-center">
-        <JoinTripForm
-          tripId={tripId}
-          destination="this trip"
-          creatorName="the organizer"
-        />
+        <div className="max-w-md w-full mx-auto text-center space-y-4 bg-white p-8 rounded-3xl border border-slate-200/80 shadow-xs">
+          <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto">
+            <ShieldX className="w-6 h-6" />
+          </div>
+          <h2 className="text-xl font-bold text-slate-900">
+            We&apos;re sorry, but you are not a member of this trip
+          </h2>
+          <p className="text-xs text-slate-500 max-w-sm mx-auto">
+            You can only join a trip through an invite link or code shared by the trip organizer.
+          </p>
+          <div className="pt-4">
+            <Link href="/">
+              <Button variant="primary" size="md" leftIcon={<Compass className="w-4 h-4" />}>
+                Go to Home
+              </Button>
+            </Link>
+          </div>
+        </div>
       </div>
     );
   }

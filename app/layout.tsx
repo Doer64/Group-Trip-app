@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { ToastProvider } from '@/components/ui/Toast';
+import { AuthProvider } from '@/contexts/AuthContext';
 import { Navbar } from '@/components/Navbar';
 
 export const metadata: Metadata = {
@@ -18,15 +19,18 @@ export default function RootLayout({
     <html lang="en" dir="ltr">
       <body className="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased">
         <ToastProvider>
-          <Navbar />
-          <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 py-8">
-            {children}
-          </main>
-          <footer className="w-full border-t border-slate-200/60 py-6 text-center text-xs text-slate-400">
-            <p>GroupTrip • Democratic Group Trip Planning</p>
-          </footer>
+          <AuthProvider>
+            <Navbar />
+            <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 py-8">
+              {children}
+            </main>
+            <footer className="w-full border-t border-slate-200/60 py-6 text-center text-xs text-slate-400">
+              <p>GroupTrip • Democratic Group Trip Planning</p>
+            </footer>
+          </AuthProvider>
         </ToastProvider>
       </body>
     </html>
   );
 }
+

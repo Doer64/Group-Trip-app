@@ -1,7 +1,6 @@
 import { NextRequest } from 'next/server';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
-import { addMemberSchema } from '@/lib/validations/schemas';
-import { createSessionToken, setSessionCookie } from '@/lib/session';
+import { getSessionUserId } from '@/lib/session';
 import { jsonSuccess, jsonError } from '@/lib/apiResponse';
 
 export async function POST(
@@ -10,18 +9,16 @@ export async function POST(
 ) {
   try {
     const { tripId } = await params;
-    const body = await req.json().catch(() => ({}));
-    const parseResult = addMemberSchema.safeParse(body);
 
-    if (!parseResult.success) {
-      const firstError = parseResult.error.issues[0]?.message || 'Invalid input';
-      return jsonError(firstError, 400, 'VALIDATION_ERROR');
+    // 1. Require authenticated session
+    const userId = await getSessionUserId();
+    if (!userId) {
+      return jsonError('You must be signed in to join a trip', 401, 'UNAUTHORIZED');
     }
 
-    const { email, name } = parseResult.data;
     const supabase = createServerSupabaseClient();
 
-    // 1. Verify trip exists
+    // 2. Verify trip exists
     const { data: trip, error: tripError } = await supabase
       .from('trips')
       .select('id, destination')
@@ -32,44 +29,18 @@ export async function POST(
       return jsonError('Trip not found', 404, 'NOT_FOUND');
     }
 
-    // 2. Find or create user
-    let { data: user, error: userError } = await supabase
+    // 3. Verify user exists
+    const { data: user, error: userError } = await supabase
       .from('users')
       .select('*')
-      .eq('email', email)
+      .eq('id', userId)
       .maybeSingle();
 
-    if (userError) {
-      console.error('Error finding user:', userError);
-      return jsonError('Database query failed', 500, 'DATABASE_ERROR');
+    if (userError || !user) {
+      return jsonError('User account not found', 404, 'NOT_FOUND');
     }
 
-    if (!user) {
-      if (!name || name.trim().length === 0) {
-        return jsonError(
-          'Your name is required to join for the first time',
-          400,
-          'NAME_REQUIRED'
-        );
-      }
-
-      const { data: newUser, error: insertError } = await supabase
-        .from('users')
-        .insert({
-          email,
-          name: name.trim(),
-        })
-        .select()
-        .single();
-
-      if (insertError || !newUser) {
-        console.error('Error creating user:', insertError);
-        return jsonError('Failed to create user account', 500, 'DATABASE_ERROR');
-      }
-      user = newUser;
-    }
-
-    // 3. Add to trip_members if not already member
+    // 4. Add to trip_members if not already member
     const { error: memberInsertError } = await supabase
       .from('trip_members')
       .upsert(
@@ -84,10 +55,6 @@ export async function POST(
       console.error('Error adding member to trip:', memberInsertError);
       return jsonError('Failed to join trip', 500, 'DATABASE_ERROR');
     }
-
-    // 4. Issue session cookie
-    const token = await createSessionToken(user.id);
-    await setSessionCookie(token);
 
     return jsonSuccess({
       success: true,

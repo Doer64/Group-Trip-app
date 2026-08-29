@@ -20,16 +20,6 @@ export const createTripSchema = z.object({
     .trim()
     .min(1, { message: 'Destination is required' })
     .max(100, { message: 'Destination cannot exceed 100 characters' }),
-  creatorEmail: z
-    .string()
-    .trim()
-    .toLowerCase()
-    .email({ message: 'Valid organizer email is required' }),
-  creatorName: z
-    .string()
-    .trim()
-    .min(1, { message: 'Organizer name is required' })
-    .max(50, { message: 'Organizer name cannot exceed 50 characters' }),
 });
 
 export const addMemberSchema = z.object({

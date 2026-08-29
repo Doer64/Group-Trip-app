@@ -2,11 +2,17 @@ import { NextRequest } from 'next/server';
 import crypto from 'crypto';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { createTripSchema } from '@/lib/validations/schemas';
-import { createSessionToken, setSessionCookie } from '@/lib/session';
+import { getSessionUserId } from '@/lib/session';
 import { jsonSuccess, jsonError } from '@/lib/apiResponse';
 
 export async function POST(req: NextRequest) {
   try {
+    // 1. Require authenticated session
+    const userId = await getSessionUserId();
+    if (!userId) {
+      return jsonError('You must be signed in to create a trip', 401, 'UNAUTHORIZED');
+    }
+
     const body = await req.json().catch(() => ({}));
     const parseResult = createTripSchema.safeParse(body);
 
@@ -15,42 +21,25 @@ export async function POST(req: NextRequest) {
       return jsonError(firstError, 400, 'VALIDATION_ERROR');
     }
 
-    const { destination, creatorEmail, creatorName } = parseResult.data;
+    const { destination } = parseResult.data;
     const supabase = createServerSupabaseClient();
 
-    // 1. Find or create the creator user
-    let { data: creator, error: findUserError } = await supabase
+    // 2. Look up the authenticated user
+    const { data: creator, error: findUserError } = await supabase
       .from('users')
       .select('*')
-      .eq('email', creatorEmail)
+      .eq('id', userId)
       .maybeSingle();
 
-    if (findUserError) {
+    if (findUserError || !creator) {
       console.error('Error finding creator:', findUserError);
-      return jsonError('Database query failed', 500, 'DATABASE_ERROR');
+      return jsonError('User account not found', 404, 'NOT_FOUND');
     }
 
-    if (!creator) {
-      const { data: newUser, error: createError } = await supabase
-        .from('users')
-        .insert({
-          email: creatorEmail,
-          name: creatorName.trim(),
-        })
-        .select()
-        .single();
-
-      if (createError || !newUser) {
-        console.error('Error creating creator user:', createError);
-        return jsonError('Failed to create user account', 500, 'DATABASE_ERROR');
-      }
-      creator = newUser;
-    }
-
-    // 2. Generate a unique cryptographically random invite token
+    // 3. Generate a unique cryptographically random invite token
     const inviteToken = crypto.randomBytes(6).toString('hex');
 
-    // 3. Create the trip
+    // 4. Create the trip
     const { data: trip, error: tripError } = await supabase
       .from('trips')
       .insert({
@@ -66,7 +55,7 @@ export async function POST(req: NextRequest) {
       return jsonError('Failed to create trip', 500, 'DATABASE_ERROR');
     }
 
-    // 4. Add creator as a trip member
+    // 5. Add creator as a trip member
     const { error: memberError } = await supabase
       .from('trip_members')
       .insert({
@@ -78,10 +67,6 @@ export async function POST(req: NextRequest) {
       console.error('Error adding creator to trip_members:', memberError);
     }
 
-    // 5. Issue session cookie
-    const token = await createSessionToken(creator.id);
-    await setSessionCookie(token);
-
     const origin = req.headers.get('origin') || '';
     const inviteUrl = `${origin}/invite/${trip.invite_token}`;
 
@@ -91,11 +76,6 @@ export async function POST(req: NextRequest) {
         destination: trip.destination,
         inviteToken: trip.invite_token,
         inviteUrl,
-        user: {
-          id: creator.id,
-          email: creator.email,
-          name: creator.name,
-        },
       },
       201
     );
