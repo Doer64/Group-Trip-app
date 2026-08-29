@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import fuzzysort from 'fuzzysort';
 
 export type DestinationEntry = {
   type: 'city' | 'country';
@@ -11,97 +10,112 @@ export type DestinationEntry = {
   aliases: string[];
 };
 
-type SearchIndexItem = {
-  text: string;
-  entryIndex: number;
-};
+// Singleton worker instance
+let workerInstance: Worker | null = null;
+let isWorkerReady = false;
+let initPromise: Promise<void> | null = null;
+let searchIdCounter = 0;
 
-// In-memory module cache so data is loaded only once across the entire session
-let cachedDestinations: DestinationEntry[] | null = null;
-let cachedSearchIndex: SearchIndexItem[] | null = null;
-let fetchPromise: Promise<void> | null = null;
+// Callbacks for pending searches
+const searchCallbacks = new Map<number, (results: DestinationEntry[]) => void>();
 
-async function loadDestinationsData(): Promise<void> {
-  if (cachedDestinations && cachedSearchIndex) return;
-  if (fetchPromise) return fetchPromise;
+function getWorker(): Worker {
+  if (typeof window === 'undefined') {
+    throw new Error('Worker cannot be created on the server');
+  }
+  
+  if (!workerInstance) {
+    // Next.js 13+ standard Web Worker instantiation
+    workerInstance = new Worker(new URL('./destination.worker.ts', import.meta.url), {
+      type: 'module', // Optional in most cases, but good for ES modules
+    });
+    
+    workerInstance.onmessage = (e) => {
+      const { type, id, suggestions } = e.data;
+      if (type === 'SEARCH_RESULT' && searchCallbacks.has(id)) {
+        searchCallbacks.get(id)!(suggestions);
+        searchCallbacks.delete(id);
+      } else if (type === 'INIT_DONE') {
+        isWorkerReady = true;
+      }
+    };
+  }
+  return workerInstance;
+}
 
-  fetchPromise = (async () => {
+function initWorkerData(): Promise<void> {
+  if (isWorkerReady) return Promise.resolve();
+  if (initPromise) return initPromise;
+  
+  initPromise = new Promise((resolve, reject) => {
     try {
-      const res = await fetch('/data/destinations.json');
-      if (!res.ok) {
-        throw new Error(`Failed to load destinations: ${res.status}`);
-      }
-      const data: DestinationEntry[] = await res.json();
-      cachedDestinations = data;
-
-      const index: SearchIndexItem[] = [];
-      for (let i = 0; i < data.length; i++) {
-        const item = data[i];
-        index.push({ text: item.name, entryIndex: i });
-
-        if (item.aliases && Array.isArray(item.aliases)) {
-          for (const alias of item.aliases) {
-            if (alias && alias !== item.name) {
-              index.push({ text: alias, entryIndex: i });
-            }
-          }
+      const worker = getWorker();
+      
+      const handleMessage = (e: MessageEvent) => {
+        if (e.data.type === 'INIT_DONE') {
+          isWorkerReady = true;
+          worker.removeEventListener('message', handleMessage);
+          resolve();
+        } else if (e.data.type === 'INIT_ERROR') {
+          worker.removeEventListener('message', handleMessage);
+          reject(new Error(e.data.error));
         }
-      }
-      cachedSearchIndex = index;
+      };
+      
+      worker.addEventListener('message', handleMessage);
+      worker.postMessage({ 
+        type: 'INIT', 
+        payload: { url: window.location.origin + '/data/destinations.json' } 
+      });
     } catch (err) {
-      console.error('Error loading destinations.json:', err);
-    } finally {
-      fetchPromise = null;
+      reject(err);
     }
-  })();
-
-  return fetchPromise;
+  });
+  
+  return initPromise;
 }
 
 export function useDestinationSuggestions() {
-  const [isDataLoaded, setIsDataLoaded] = useState(
-    cachedDestinations !== null && cachedSearchIndex !== null
-  );
+  const [isDataLoaded, setIsDataLoaded] = useState(isWorkerReady);
   const [suggestions, setSuggestions] = useState<DestinationEntry[]>([]);
   const isFetchingRef = useRef(false);
+  const latestSearchIdRef = useRef(-1);
 
-  // Eagerly prefetch or prepare index on hook mount
+  // Eagerly load and prepare index in the background worker on mount
   useEffect(() => {
-    if (!cachedDestinations && !isFetchingRef.current) {
+    if (!isWorkerReady && !isFetchingRef.current && typeof window !== 'undefined') {
       isFetchingRef.current = true;
-      loadDestinationsData().then(() => {
-        setIsDataLoaded(true);
-        isFetchingRef.current = false;
-      });
+      initWorkerData()
+        .then(() => {
+          setIsDataLoaded(true);
+          isFetchingRef.current = false;
+        })
+        .catch(err => {
+          console.error('Failed to init worker data:', err);
+          isFetchingRef.current = false;
+        });
     }
   }, []);
 
   const search = useCallback((query: string) => {
     const trimmed = query.trim();
-    if (trimmed.length < 2 || !cachedDestinations || !cachedSearchIndex) {
+    if (trimmed.length < 2 || !isWorkerReady) {
       setSuggestions([]);
       return;
     }
 
-    const results = fuzzysort.go(trimmed, cachedSearchIndex, {
-      key: 'text',
-      limit: 40,
-      threshold: -10000,
+    const worker = getWorker();
+    const id = ++searchIdCounter;
+    latestSearchIdRef.current = id;
+
+    searchCallbacks.set(id, (results) => {
+      // Only set suggestions if this is the latest search we requested
+      if (latestSearchIdRef.current === id) {
+        setSuggestions(results);
+      }
     });
 
-    const seen = new Set<number>();
-    const matchedEntries: DestinationEntry[] = [];
-
-    for (const r of results) {
-      const idx = r.obj.entryIndex;
-      if (!seen.has(idx)) {
-        seen.add(idx);
-        matchedEntries.push(cachedDestinations[idx]);
-        if (matchedEntries.length >= 8) break;
-      }
-    }
-
-    setSuggestions(matchedEntries);
+    worker.postMessage({ type: 'SEARCH', id, payload: { query: trimmed } });
   }, []);
 
   const clearSuggestions = useCallback(() => {
@@ -109,12 +123,14 @@ export function useDestinationSuggestions() {
   }, []);
 
   const ensureDataLoaded = useCallback(() => {
-    if (!cachedDestinations && !isFetchingRef.current) {
+    if (!isWorkerReady && !isFetchingRef.current && typeof window !== 'undefined') {
       isFetchingRef.current = true;
-      loadDestinationsData().then(() => {
-        setIsDataLoaded(true);
-        isFetchingRef.current = false;
-      });
+      initWorkerData()
+        .then(() => {
+          setIsDataLoaded(true);
+          isFetchingRef.current = false;
+        })
+        .catch(console.error);
     }
   }, []);
 

@@ -28,16 +28,19 @@ export function DestinationInput({
 
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
+  const [isPending, startTransition] = React.useTransition();
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Trigger search on value change
+  // Trigger search on value change without blocking typing
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
-    onChange(val);
-    search(val);
-    setIsOpen(true);
-    setHighlightedIndex(-1);
+    onChange(val); // Instant input update
+    startTransition(() => {
+      search(val);
+      setIsOpen(true);
+      setHighlightedIndex(-1);
+    });
   };
 
   const handleFocus = () => {
