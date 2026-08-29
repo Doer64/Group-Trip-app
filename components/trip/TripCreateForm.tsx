@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Compass, Mail, User as UserIcon, ArrowRight } from 'lucide-react';
 import { Input } from '../ui/Input';
 import { Button } from '../ui/Button';
+import { DestinationInput } from './DestinationInput';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
 import { useToast } from '../ui/Toast';
 
@@ -82,13 +83,12 @@ export function TripCreateForm({ onSuccess }: TripCreateFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 text-left">
-      <Input
+      <DestinationInput
         label="Where are you traveling to?"
-        placeholder="e.g. Rome, Italy or Tokyo, Japan"
+        placeholder="e.g. Rome, Paris, Tokyo, Barcelona..."
         value={destination}
-        onChange={(e) => setDestination(e.target.value)}
+        onChange={(val) => setDestination(val)}
         error={formErrors.destination}
-        leftIcon={<Compass className="w-4 h-4" />}
         autoFocus
       />
 
