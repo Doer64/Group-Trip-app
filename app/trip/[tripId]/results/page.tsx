@@ -44,7 +44,7 @@ export default function TripResultsPage() {
   if (isTripLoading || isLoading) {
     return (
       <div className="py-24 flex flex-col items-center justify-center text-slate-400 gap-3">
-        <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
         <span className="text-sm font-medium">Computing group consensus...</span>
       </div>
     );
@@ -52,7 +52,7 @@ export default function TripResultsPage() {
 
   if (error || !trip) {
     return (
-      <div className="max-w-md mx-auto py-16 text-center space-y-4 bg-white p-8 rounded-3xl border border-slate-200/80 shadow-xs">
+      <div className="max-w-md mx-auto py-16 text-center space-y-4 bg-white p-8 rounded-[2rem] border border-slate-200 shadow-xl shadow-slate-900/5">
         <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center mx-auto">
           <AlertCircle className="w-6 h-6" />
         </div>

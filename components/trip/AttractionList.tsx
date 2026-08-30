@@ -32,15 +32,15 @@ export function AttractionList({
         {[1, 2, 3, 4, 5, 6].map((i) => (
           <div
             key={i}
-            className="flex flex-col bg-white/80 rounded-3xl border border-indigo-100 overflow-hidden shadow-sm"
+            className="flex flex-col bg-white rounded-3xl border border-slate-200/80 overflow-hidden shadow-2xs"
           >
             <Skeleton className="w-full h-48 rounded-none" />
             <div className="p-4 space-y-3">
               <Skeleton className="w-3/4 h-5" />
               <Skeleton className="w-full h-4" />
               <div className="pt-3 border-t border-slate-100 flex justify-between items-center">
-                <Skeleton className="w-20 h-4" />
-                <Skeleton className="w-24 h-7 rounded-lg" />
+                <Skeleton className="w-16 h-4" />
+                <Skeleton className="w-24 h-7 rounded-xl" />
               </div>
             </div>
           </div>
@@ -52,9 +52,9 @@ export function AttractionList({
   if (attractions.length === 0) {
     return (
       <EmptyState
-        icon={<MapPin className="w-6 h-6 text-indigo-500" />}
+        icon={<MapPin className="w-6 h-6 text-blue-600" />}
         title="No attractions proposed yet"
-        description="Search for sights, museums, landmarks or top food spots and add them to your group's voting board."
+        description="Search for sights, museums, landmarks or top food spots and add them to your group's voting deck."
         actionLabel={onOpenSearch ? 'Add First Attraction' : undefined}
         onAction={onOpenSearch}
       />

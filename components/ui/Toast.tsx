@@ -46,28 +46,28 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   return (
     <ToastContext.Provider value={value}>
       {children}
-      <div className="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none max-w-sm w-full px-4">
+      <div className="fixed bottom-5 right-5 z-50 flex flex-col gap-2.5 pointer-events-none max-w-sm w-full px-4">
         {toasts.map((t) => (
           <div
             key={t.id}
-            className={`pointer-events-auto flex items-center justify-between p-3.5 rounded-2xl shadow-xl border text-sm animate-in slide-in-from-bottom-5 duration-200 ${
+            className={`pointer-events-auto flex items-center justify-between p-3.5 rounded-2xl shadow-xl border text-sm backdrop-blur-xl animate-in slide-in-from-bottom-5 duration-200 ${
               t.type === 'success'
-                ? 'bg-white border-emerald-200 text-emerald-900 shadow-emerald-500/5'
+                ? 'bg-white/95 border-emerald-200 text-emerald-950 shadow-emerald-500/10'
                 : t.type === 'error'
-                ? 'bg-white border-rose-200 text-rose-900 shadow-rose-500/5'
-                : 'bg-white border-indigo-100 text-indigo-800 shadow-indigo-500/5'
+                ? 'bg-white/95 border-rose-200 text-rose-950 shadow-rose-500/10'
+                : 'bg-white/95 border-slate-200 text-slate-900 shadow-slate-500/10'
             }`}
           >
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2.5 min-w-0">
               {t.type === 'success' && <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />}
               {t.type === 'error' && <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />}
-              {t.type === 'info' && <Info className="w-4 h-4 text-violet-600 shrink-0" />}
-              <span className="font-medium text-xs sm:text-sm">{t.message}</span>
+              {t.type === 'info' && <Info className="w-4 h-4 text-blue-600 shrink-0" />}
+              <span className="font-semibold text-xs sm:text-sm truncate">{t.message}</span>
             </div>
             <button
               onClick={() => removeToast(t.id)}
-              className="text-slate-400 hover:text-slate-600 p-1 rounded-md transition-colors ml-2 shrink-0"
-              aria-label="Dismiss toast"
+              className="text-slate-400 hover:text-slate-600 p-1 rounded-lg transition-colors ml-2 shrink-0 cursor-pointer"
+              aria-label="Dismiss notification"
             >
               <X className="w-3.5 h-3.5" />
             </button>

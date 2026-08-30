@@ -75,7 +75,7 @@ export function TripCreateForm({ onSuccess }: TripCreateFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4 text-left">
       <DestinationInput
-        label="Where are you traveling to?"
+        label="Destination"
         placeholder="e.g. Rome, Paris, Tokyo, Barcelona..."
         value={destination}
         onChange={(val) => setDestination(val)}
@@ -88,11 +88,11 @@ export function TripCreateForm({ onSuccess }: TripCreateFormProps) {
           type="submit"
           variant="primary"
           size="lg"
-          className="w-full font-semibold"
+          className="w-full font-bold"
           isLoading={isLoading}
           rightIcon={<ArrowRight className="w-4 h-4" />}
         >
-          {isAuthenticated ? 'Create Trip & Get Invite Link' : 'Sign In & Create Trip'}
+          {isAuthenticated ? 'Create Trip' : 'Sign In & Create Trip'}
         </Button>
       </div>
     </form>

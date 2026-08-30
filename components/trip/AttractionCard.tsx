@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Trash2, User, ImageOff } from 'lucide-react';
+import { Trash2, User, ImageOff, MapPin, ExternalLink } from 'lucide-react';
 import { AttractionWithVotes } from '@/lib/types/database.types';
 import { VoteButtons } from './VoteButtons';
 
@@ -11,23 +11,6 @@ interface AttractionCardProps {
   isOrganizer?: boolean;
   onVote: (attractionId: string, voteType: 'like' | 'dislike') => void;
   onDelete?: (attractionId: string) => void;
-}
-
-function GoogleMapsIcon({ className = 'w-4 h-4' }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className={className}
-      fill="currentColor"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M12 2C7.58 2 4 5.58 4 10c0 5.25 8 12 8 12s8-6.75 8-12c0-4.42-3.58-8-8-8zm0 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"
-      />
-    </svg>
-  );
 }
 
 export function AttractionCard({
@@ -43,7 +26,6 @@ export function AttractionCard({
   const canDelete =
     isOrganizer || (currentUserId && attraction.added_by_user_id === currentUserId);
 
-  // Compute direct Google Maps link to the attraction page
   const mapsUrl =
     attraction.place_uri ||
     (attraction.place_id
@@ -61,8 +43,13 @@ export function AttractionCard({
     }
   };
 
+  const totalVotes = attraction.likes + attraction.dislikes;
+  const netScore = attraction.likes - attraction.dislikes;
+  const approvalPercent =
+    totalVotes > 0 ? Math.round((attraction.likes / totalVotes) * 100) : null;
+
   return (
-    <div className="group relative flex flex-col bg-white/90 rounded-3xl border border-indigo-100 shadow-sm shadow-indigo-100/70 hover:shadow-xl hover:shadow-indigo-200/40 hover:-translate-y-1 transition-all duration-200 overflow-hidden text-left">
+    <div className="group relative flex flex-col bg-white rounded-3xl border border-slate-200 shadow-2xs hover:shadow-xl hover:shadow-slate-900/10 hover:-translate-y-1 hover:border-slate-300 transition-all duration-200 overflow-hidden text-left">
       {/* Image Banner */}
       <div className="relative w-full h-48 bg-slate-100 overflow-hidden shrink-0">
         {attraction.image_url && !imageError ? (
@@ -70,72 +57,94 @@ export function AttractionCard({
             src={attraction.image_url}
             alt={attraction.name}
             onError={() => setImageError(true)}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             loading="lazy"
           />
         ) : (
-        <div className="w-full h-full flex flex-col items-center justify-center bg-linear-to-br from-violet-100 to-cyan-100 text-indigo-400">
+          <div className="w-full h-full flex flex-col items-center justify-center bg-linear-to-br from-blue-50 via-slate-100 to-amber-50 text-slate-400">
             <ImageOff className="w-8 h-8 mb-1.5 opacity-60" />
-            <span className="text-[11px] font-medium tracking-wide">No preview image</span>
+            <span className="text-[11px] font-semibold text-slate-500 tracking-wide">No preview image</span>
           </div>
         )}
 
         {/* Proposer Badge */}
-        <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-indigo-950/75 backdrop-blur-md px-2.5 py-1 rounded-full text-white text-[11px] font-bold shadow-sm">
-          <User className="w-3 h-3 text-amber-200" />
+        <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-slate-950/75 backdrop-blur-md px-2.5 py-1 rounded-full text-white text-[11px] font-semibold shadow-2xs">
+          <User className="w-3 h-3 text-amber-300" />
           <span className="truncate max-w-[120px]">{attraction.added_by_name || 'Member'}</span>
         </div>
 
-        {/* Delete Button (Proposer or Organizer) */}
-        {canDelete && onDelete && (
-          <button
-            type="button"
-            onClick={handleDelete}
-            disabled={isDeleting}
-            className="absolute top-3 right-3 p-1.5 rounded-full bg-white/90 text-indigo-400 hover:text-rose-600 hover:bg-white shadow-sm transition-all cursor-pointer opacity-80 group-hover:opacity-100"
-            title="Remove attraction"
-            aria-label="Remove attraction"
-          >
-            <Trash2 className="w-3.5 h-3.5" />
-          </button>
+        {/* Score pill in top-right */}
+        <div className="absolute top-3 right-3 flex items-center gap-1.5">
+          {totalVotes > 0 && (
+            <div
+              className={`px-2 py-0.5 rounded-full text-[11px] font-black backdrop-blur-md shadow-2xs ${
+                netScore > 0
+                  ? 'bg-emerald-600/90 text-white'
+                  : netScore < 0
+                  ? 'bg-rose-600/90 text-white'
+                  : 'bg-slate-800/90 text-slate-200'
+              }`}
+            >
+              {netScore > 0 ? `+${netScore}` : netScore}
+            </div>
+          )}
+
+          {/* Delete Button */}
+          {canDelete && onDelete && (
+            <button
+              type="button"
+              onClick={handleDelete}
+              disabled={isDeleting}
+              className="p-1.5 rounded-full bg-white/90 text-slate-400 hover:text-rose-600 hover:bg-white shadow-2xs transition-all cursor-pointer opacity-80 group-hover:opacity-100"
+              title="Remove attraction"
+              aria-label="Remove attraction"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
+
+        {/* Micro Approval Bar at bottom of photo */}
+        {approvalPercent !== null && (
+          <div className="absolute bottom-0 inset-x-0 h-1 bg-rose-500/80">
+            <div
+              className="h-full bg-emerald-500 transition-all duration-300"
+              style={{ width: `${approvalPercent}%` }}
+            />
+          </div>
         )}
       </div>
 
       {/* Card Content */}
       <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
         <div>
-          <h4 className="text-base font-black text-indigo-950 line-clamp-1 group-hover:text-violet-600 transition-colors">
+          <h4 className="text-base font-extrabold text-slate-900 line-clamp-1 group-hover:text-blue-600 transition-colors">
             {attraction.name}
           </h4>
 
           {attraction.description && (
-            <p className="text-xs text-indigo-500 mt-1 line-clamp-2 leading-relaxed">
+            <p className="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">
               {attraction.description}
             </p>
           )}
         </div>
 
         {/* Card Footer: Maps Link + Vote Buttons */}
-        <div className="mt-4 pt-3 border-t border-indigo-50 flex items-center justify-between gap-2">
+        <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
           {mapsUrl ? (
             <a
               href={mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-8 h-8 rounded-xl bg-cyan-500 hover:bg-cyan-600 active:scale-95 text-white flex items-center justify-center shadow-sm transition-all hover:shadow cursor-pointer shrink-0"
+              className="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 font-bold hover:underline"
               title="Open in Google Maps"
-              aria-label="Open in Google Maps"
             >
-              <GoogleMapsIcon className="w-4 h-4" />
+              <MapPin className="w-3.5 h-3.5" />
+              <span>Map</span>
+              <ExternalLink className="w-2.5 h-2.5 opacity-70" />
             </a>
           ) : (
-            <div
-              className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-200 flex items-center justify-center cursor-not-allowed shrink-0"
-              title="Location unavailable"
-              aria-label="Location unavailable"
-            >
-              <GoogleMapsIcon className="w-4 h-4" />
-            </div>
+            <span className="text-[11px] text-slate-400">No map</span>
           )}
 
           <VoteButtons

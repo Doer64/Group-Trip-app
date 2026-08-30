@@ -26,7 +26,6 @@ export default function TripBoardPage() {
   } = useAttractions(tripId);
   const { user } = useCurrentUser();
 
-  // All hooks must be called unconditionally at the top level
   const [sortBy, setSortBy] = useState<'newest' | 'score' | 'least_voted'>('newest');
 
   const sortedAttractions = useMemo(() => {
@@ -41,7 +40,6 @@ export default function TripBoardPage() {
         if (votesA !== votesB) return votesA - votesB;
       }
 
-      // Default to time (newest first)
       const timeA = new Date(a.created_at || 0).getTime();
       const timeB = new Date(b.created_at || 0).getTime();
       return timeB - timeA;
@@ -51,8 +49,8 @@ export default function TripBoardPage() {
   if (isTripLoading) {
     return (
       <div className="py-24 flex flex-col items-center justify-center text-slate-400 gap-3">
-        <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
-        <span className="text-sm font-medium">Loading trip board...</span>
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+        <span className="text-sm font-medium">Loading voting board...</span>
       </div>
     );
   }
@@ -61,15 +59,15 @@ export default function TripBoardPage() {
   if (tripError && (tripError.includes('not a member') || tripError.includes('UNAUTHORIZED') || tripError.includes('Unauthorized'))) {
     return (
       <div className="py-12 flex items-center justify-center">
-        <div className="max-w-md w-full mx-auto text-center space-y-4 bg-white p-8 rounded-3xl border border-slate-200/80 shadow-xs">
+        <div className="max-w-md w-full mx-auto text-center space-y-4 bg-white p-8 rounded-[2rem] border border-slate-200 shadow-xl shadow-slate-900/5">
           <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto">
             <ShieldX className="w-6 h-6" />
           </div>
           <h2 className="text-xl font-bold text-slate-900">
-            We&apos;re sorry, but you are not a member of this trip
+            You&apos;re not a member of this trip yet
           </h2>
           <p className="text-xs text-slate-500 max-w-sm mx-auto">
-            You can only join a trip through an invite link or code shared by the trip organizer.
+            Ask the trip organizer to share their invite link with you.
           </p>
           <div className="pt-4">
             <Link href="/">
@@ -85,7 +83,7 @@ export default function TripBoardPage() {
 
   if (tripError || !trip) {
     return (
-      <div className="max-w-md mx-auto py-16 text-center space-y-4 bg-white p-8 rounded-3xl border border-slate-200/80 shadow-xs">
+      <div className="max-w-md mx-auto py-16 text-center space-y-4 bg-white p-8 rounded-[2rem] border border-slate-200 shadow-xl shadow-slate-900/5">
         <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center mx-auto">
           <AlertCircle className="w-6 h-6" />
         </div>
@@ -102,9 +100,8 @@ export default function TripBoardPage() {
       {/* Trip Header Banner */}
       <TripHeader trip={trip} attractionCount={attractions.length} />
 
-      {/* Places Search Bar */}
-      <div className="max-w-2xl relative">
-        <p className="text-xs font-black tracking-[0.16em] text-violet-500 mb-2 ml-1">THE IDEA MACHINE</p>
+      {/* Pitch Console */}
+      <div className="w-full relative">
         <PlacesSearchBar
           tripId={trip.id}
           destination={trip.destination}
@@ -116,24 +113,24 @@ export default function TripBoardPage() {
       <div className="space-y-4 pt-2">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <h2 className="text-xl font-black text-indigo-950 tracking-tight">
-              The contenders
+            <h2 className="text-xl font-black text-slate-900 tracking-tight">
+              The Contenders
             </h2>
-            <span className="px-2.5 py-1 rounded-full bg-violet-100 text-xs font-black text-violet-600">
+            <span className="px-2.5 py-0.5 rounded-full bg-blue-50 text-xs font-extrabold text-blue-700">
               {attractions.length} {attractions.length === 1 ? 'place' : 'places'}
             </span>
           </div>
 
           {attractions.length > 0 && (
             <div className="flex items-center gap-2">
-              <label htmlFor="sort-select" className="text-xs font-bold text-indigo-500">
+              <label htmlFor="sort-select" className="text-xs font-bold text-slate-500">
                 Sort by:
               </label>
               <select
                 id="sort-select"
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="text-xs bg-white border border-indigo-100 rounded-xl px-2.5 py-1.5 text-indigo-700 font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer shadow-sm"
+                className="text-xs bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 cursor-pointer shadow-2xs"
               >
                 <option value="newest">Recently Added</option>
                 <option value="score">Highest Score</option>

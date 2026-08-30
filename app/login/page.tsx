@@ -41,10 +41,8 @@ function LoginForm() {
     setIsLoading(false);
 
     if (res.success) {
-      // Existing user found & logged in -> navigate with full page refresh
       window.location.href = redirect;
     } else if (res.code === 'NAME_REQUIRED') {
-      // User is new -> move to Step 2 to enter name
       setStep('name');
       setError(null);
     } else {
@@ -78,32 +76,32 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-[65vh] flex items-center justify-center py-6">
+    <div className="min-h-[60vh] flex items-center justify-center py-6 sm:py-10">
       <div className="w-full max-w-md">
         {/* Contextual message banner */}
         {message && (
-          <div className="mb-6 bg-amber-50/90 border border-amber-200 rounded-3xl p-4 text-center shadow-sm">
-            <Sparkles className="w-5 h-5 text-amber-500 mx-auto mb-2" />
-            <p className="text-sm text-indigo-900 font-bold leading-relaxed">
+          <div className="mb-6 bg-amber-50 border border-amber-200 rounded-2xl p-4 text-center shadow-2xs">
+            <Sparkles className="w-4 h-4 text-amber-600 mx-auto mb-1.5" />
+            <p className="text-xs sm:text-sm text-slate-800 font-semibold leading-relaxed">
               {message}
             </p>
           </div>
         )}
 
         {/* Card */}
-        <div className="bg-white/90 rounded-[2rem] border border-white p-6 sm:p-8 shadow-xl shadow-indigo-200/50">
+        <div className="bg-white/95 rounded-[2rem] border border-slate-200 p-6 sm:p-8 shadow-xl shadow-slate-900/5">
           {step === 'email' ? (
             /* STEP 1: Email Only */
             <>
               <div className="text-center mb-6">
-                <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-violet-500 to-indigo-600 text-white flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-200 rotate-[-6deg]">
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center mx-auto mb-3 shadow-2xs">
                   <Compass className="w-6 h-6" />
                 </div>
-                <h1 className="text-2xl font-black text-indigo-950">
-                  Hello, fellow escape artist
+                <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+                  Sign In
                 </h1>
-                <p className="text-xs text-indigo-500 mt-1">
-                  Enter your email. No passwords, no paperwork, no boring bits.
+                <p className="text-xs text-slate-500 mt-1">
+                  Enter your email to continue. No password needed.
                 </p>
               </div>
 
@@ -128,7 +126,7 @@ function LoginForm() {
                     type="submit"
                     variant="primary"
                     size="lg"
-                    className="w-full font-black"
+                    className="w-full font-bold"
                     isLoading={isLoading}
                     rightIcon={<ArrowRight className="w-4 h-4" />}
                   >
@@ -147,26 +145,26 @@ function LoginForm() {
                     setStep('email');
                     setError(null);
                   }}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-500 hover:text-indigo-900 transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" />
                   <span>Change email</span>
                 </button>
 
-                <span className="text-[11px] font-medium text-indigo-300 truncate max-w-[180px]">
+                <span className="text-[11px] font-medium text-slate-400 truncate max-w-[180px]">
                   {email}
                 </span>
               </div>
 
               <div className="text-center mb-6">
-                <div className="w-14 h-14 rounded-2xl bg-cyan-100 text-indigo-600 flex items-center justify-center mx-auto mb-4 shadow-sm rotate-[5deg]">
+                <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-100 text-amber-600 flex items-center justify-center mx-auto mb-3 shadow-2xs">
                   <UserPlus className="w-6 h-6" />
                 </div>
-                <h1 className="text-2xl font-black text-indigo-950">
-                  Nice to meet you!
+                <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+                  Welcome to the crew!
                 </h1>
-                <p className="text-xs text-indigo-500 mt-1">
-                  What should your travel crew call you?
+                <p className="text-xs text-slate-500 mt-1">
+                  What should your group call you?
                 </p>
               </div>
 
@@ -179,7 +177,7 @@ function LoginForm() {
                   required
                   autoFocus
                   leftIcon={<UserIcon className="w-4 h-4" />}
-                  helperText="Your name will be visible to your travel group"
+                  helperText="Visible to members on your trips"
                 />
 
                 {error && (
@@ -191,7 +189,7 @@ function LoginForm() {
                     type="submit"
                     variant="primary"
                     size="lg"
-                    className="w-full font-black"
+                    className="w-full font-bold"
                     isLoading={isLoading}
                     rightIcon={<ArrowRight className="w-4 h-4" />}
                   >

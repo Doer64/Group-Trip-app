@@ -51,32 +51,32 @@ export function Modal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs transition-opacity animate-in fade-in duration-200"
+        className="fixed inset-0 bg-slate-950/40 backdrop-blur-xs transition-opacity animate-in fade-in duration-200"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Dialog box */}
       <div
-        className={`relative w-full ${maxWidthStyles[maxWidth]} bg-[#fffeff] rounded-3xl shadow-2xl shadow-indigo-950/15 border border-white ${
+        className={`relative w-full ${maxWidthStyles[maxWidth]} bg-white rounded-[2rem] shadow-2xl shadow-slate-900/15 border border-slate-100 ${
           overflowVisible ? 'overflow-visible' : 'overflow-hidden'
         } z-10 animate-in zoom-in-95 duration-200`}
         role="dialog"
         aria-modal="true"
       >
-        <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-indigo-100/70">
+        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-slate-100">
           <div>
-            {title && <h3 className="text-lg font-black text-indigo-950">{title}</h3>}
+            {title && <h3 className="text-lg font-black text-slate-900 tracking-tight">{title}</h3>}
             {description && (
-              <p className="text-xs text-indigo-500 mt-0.5">{description}</p>
+              <p className="text-xs text-slate-500 mt-0.5">{description}</p>
             )}
           </div>
           <button
             onClick={onClose}
-            className="text-indigo-300 hover:text-indigo-700 p-1.5 rounded-lg hover:bg-indigo-50 transition-colors cursor-pointer"
+            className="text-slate-400 hover:text-slate-700 p-2 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer"
             aria-label="Close modal"
           >
             <X className="w-5 h-5" />

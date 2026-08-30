@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Copy, Check, Share2, MessageCircle } from 'lucide-react';
+import { Copy, Check, MessageCircle } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { useToast } from '../ui/Toast';
 
@@ -38,8 +38,8 @@ export function InviteLinkBox({ inviteToken, destination }: InviteLinkBoxProps) 
 
   return (
     <div className="space-y-4 text-left">
-      <p className="text-xs text-indigo-500">
-        Send this magic link to the crew—then the pitching and voting can begin.
+      <p className="text-xs text-slate-500">
+        Share this link with your friends to start pitching and voting.
       </p>
 
       {/* Copy link input row */}
@@ -48,7 +48,7 @@ export function InviteLinkBox({ inviteToken, destination }: InviteLinkBoxProps) 
           type="text"
           readOnly
           value={inviteUrl}
-          className="flex-1 bg-violet-50 border border-violet-100 rounded-xl px-3.5 py-2.5 text-xs text-indigo-700 font-mono select-all focus:outline-none"
+          className="flex-1 bg-slate-50 border border-slate-200 rounded-2xl px-3.5 py-2.5 text-xs text-slate-800 font-mono select-all focus:outline-none focus:border-blue-500"
         />
         <Button
           size="sm"
@@ -61,8 +61,8 @@ export function InviteLinkBox({ inviteToken, destination }: InviteLinkBoxProps) 
       </div>
 
       {/* Share directly */}
-      <div className="pt-2 border-t border-indigo-50 flex items-center justify-between">
-        <span className="text-xs font-bold text-indigo-600">Quick share:</span>
+      <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
+        <span className="text-xs font-bold text-slate-600">Quick share:</span>
         <a
           href={whatsappUrl}
           target="_blank"

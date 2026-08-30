@@ -176,6 +176,14 @@ export async function POST(
 
     if (insertError || !attraction) {
       console.error('Error inserting attraction:', insertError);
+      if (
+        insertError?.code === '23505' ||
+        insertError?.message?.includes('duplicate key') ||
+        insertError?.message?.includes('unique_trip_place') ||
+        insertError?.details?.includes('already exists')
+      ) {
+        return jsonError('Place already in trip', 409, 'ALREADY_EXISTS');
+      }
       return jsonError('Failed to add attraction', 500, 'DATABASE_ERROR');
     }
 
