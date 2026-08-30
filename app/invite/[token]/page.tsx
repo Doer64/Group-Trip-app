@@ -37,7 +37,7 @@ export default function InvitePage() {
         } else if (data?.tripId) {
           if (data.isMember) {
             // Already a member, redirect to trip board directly
-            router.replace(`/trip/${data.tripId}`);
+            window.location.href = `/trip/${data.tripId}`;
             return;
           }
           setTripData(data);
@@ -49,7 +49,7 @@ export default function InvitePage() {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [token, router, isAuthLoading]);
+  }, [token, isAuthLoading]);
 
   const handleJoinTrip = async () => {
     if (!tripData) return;
@@ -69,7 +69,7 @@ export default function InvitePage() {
       }
 
       success(`Welcome to the ${tripData.destination} trip!`);
-      router.push(`/trip/${tripData.tripId}`);
+      window.location.href = `/trip/${tripData.tripId}`;
     } catch (err: any) {
       toastError(err.message || 'Network error joining trip');
     } finally {

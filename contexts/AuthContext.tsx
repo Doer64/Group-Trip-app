@@ -94,6 +94,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
     localStorage.removeItem(STORAGE_KEY);
     setUser(null);
+    // Redirect to home and do a full page refresh to clear all trip states and subscriptions
+    if (typeof window !== 'undefined') {
+      window.location.href = '/';
+    }
   }, []);
 
   const saveUserLocally = useCallback((userData: User) => {

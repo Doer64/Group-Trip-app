@@ -63,7 +63,7 @@ export function TripCreateForm({ onSuccess }: TripCreateFormProps) {
       if (onSuccess) {
         onSuccess(data.tripId);
       } else {
-        router.push(`/trip/${data.tripId}`);
+        window.location.href = `/trip/${data.tripId}`;
       }
     } catch (err: any) {
       toastError(err.message || 'Network error creating trip');

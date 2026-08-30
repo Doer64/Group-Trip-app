@@ -24,9 +24,9 @@ function LoginForm() {
   // If already logged in, redirect immediately
   useEffect(() => {
     if (isAuthenticated && user) {
-      router.replace(redirect);
+      window.location.href = redirect;
     }
-  }, [isAuthenticated, user, redirect, router]);
+  }, [isAuthenticated, user, redirect]);
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,8 +41,8 @@ function LoginForm() {
     setIsLoading(false);
 
     if (res.success) {
-      // Existing user found & logged in -> navigate to target destination
-      router.replace(redirect);
+      // Existing user found & logged in -> navigate with full page refresh
+      window.location.href = redirect;
     } else if (res.code === 'NAME_REQUIRED') {
       // User is new -> move to Step 2 to enter name
       setStep('name');
@@ -66,7 +66,7 @@ function LoginForm() {
     setIsLoading(false);
 
     if (res.success) {
-      router.replace(redirect);
+      window.location.href = redirect;
     } else {
       setError(res.error || 'Failed to create profile');
     }

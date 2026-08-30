@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { MapPin, Trash2, User, ExternalLink, ImageOff } from 'lucide-react';
+import { Trash2, User, ImageOff } from 'lucide-react';
 import { AttractionWithVotes } from '@/lib/types/database.types';
 import { VoteButtons } from './VoteButtons';
 
@@ -11,6 +11,23 @@ interface AttractionCardProps {
   isOrganizer?: boolean;
   onVote: (attractionId: string, voteType: 'like' | 'dislike') => void;
   onDelete?: (attractionId: string) => void;
+}
+
+function GoogleMapsIcon({ className = 'w-4 h-4' }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className={className}
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M12 2C7.58 2 4 5.58 4 10c0 5.25 8 12 8 12s8-6.75 8-12c0-4.42-3.58-8-8-8zm0 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"
+      />
+    </svg>
+  );
 }
 
 export function AttractionCard({
@@ -105,18 +122,20 @@ export function AttractionCard({
               href={mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-indigo-600 transition-colors"
-              title="Open Google Maps page"
+              className="w-8 h-8 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white flex items-center justify-center shadow-xs transition-all hover:shadow cursor-pointer shrink-0"
+              title="Open in Google Maps"
+              aria-label="Open in Google Maps"
             >
-              <MapPin className="w-3.5 h-3.5 text-slate-400" />
-              <span>Google Maps</span>
-              <ExternalLink className="w-3 h-3 opacity-60" />
+              <GoogleMapsIcon className="w-4 h-4" />
             </a>
           ) : (
-            <span className="text-xs text-slate-400 flex items-center gap-1">
-              <MapPin className="w-3.5 h-3.5" />
-              <span>Location unavailable</span>
-            </span>
+            <div
+              className="w-8 h-8 rounded-xl bg-slate-100 text-slate-300 flex items-center justify-center cursor-not-allowed shrink-0"
+              title="Location unavailable"
+              aria-label="Location unavailable"
+            >
+              <GoogleMapsIcon className="w-4 h-4" />
+            </div>
           )}
 
           <VoteButtons
