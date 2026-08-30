@@ -2,11 +2,12 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Users, UserPlus, Trophy, LayoutGrid, Sparkles } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
+import { Users, UserPlus, Trophy, LayoutGrid, Sparkles, Trash2 } from 'lucide-react';
 import { TripWithDetails } from '@/lib/types/database.types';
 import { Button } from '../ui/Button';
 import { Modal } from '../ui/Modal';
+import { useToast } from '../ui/Toast';
 import { InviteLinkBox } from './InviteLinkBox';
 
 interface TripHeaderProps {
@@ -16,10 +17,38 @@ interface TripHeaderProps {
 
 export function TripHeader({ trip, attractionCount = 0 }: TripHeaderProps) {
   const [isInviteOpen, setIsInviteOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  
   const pathname = usePathname();
+  const router = useRouter();
+  const toast = useToast();
+  
   const isResultsPage = pathname?.endsWith('/results');
 
   const members = trip.members || [];
+
+  const handleDeleteTrip = async () => {
+    setIsDeleting(true);
+    try {
+      const res = await fetch(`/api/trips/${trip.id}`, {
+        method: 'DELETE',
+      });
+      
+      const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.error?.message || 'Failed to delete trip');
+      }
+      
+      toast.success('Trip deleted successfully');
+      router.push('/');
+    } catch (error: any) {
+      toast.error(error.message || 'An error occurred');
+      setIsDeleting(false);
+      setIsDeleteOpen(false);
+    }
+  };
 
   return (
     <>
@@ -54,6 +83,18 @@ export function TripHeader({ trip, attractionCount = 0 }: TripHeaderProps) {
 
           {/* Action Buttons */}
           <div className="flex items-center flex-wrap gap-2.5">
+            {/* Delete Trip Button */}
+            {trip.isCreator && (
+              <Button
+                variant="danger"
+                size="sm"
+                onClick={() => setIsDeleteOpen(true)}
+                leftIcon={<Trash2 className="w-4 h-4 text-rose-600" />}
+              >
+                Delete Trip
+              </Button>
+            )}
+
             {/* Invite Button */}
             <Button
               variant="secondary"
@@ -122,6 +163,31 @@ export function TripHeader({ trip, attractionCount = 0 }: TripHeaderProps) {
           inviteToken={trip.invite_token}
           destination={trip.destination}
         />
+      </Modal>
+
+      {/* Delete Confirmation Modal */}
+      <Modal
+        isOpen={isDeleteOpen}
+        onClose={() => !isDeleting && setIsDeleteOpen(false)}
+        title="Delete Trip"
+        description={`Are you sure you want to delete the trip to ${trip.destination}? This action cannot be undone and will delete all proposed places and votes.`}
+      >
+        <div className="flex justify-end gap-3 mt-6">
+          <Button
+            variant="secondary"
+            onClick={() => setIsDeleteOpen(false)}
+            disabled={isDeleting}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="danger"
+            onClick={handleDeleteTrip}
+            isLoading={isDeleting}
+          >
+            Yes, delete trip
+          </Button>
+        </div>
       </Modal>
     </>
   );

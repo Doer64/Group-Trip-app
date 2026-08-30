@@ -86,3 +86,48 @@ export async function GET(
     return jsonError('Internal server error', 500, 'INTERNAL_SERVER_ERROR');
   }
 }
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ tripId: string }> }
+) {
+  try {
+    const { tripId } = await params;
+    const currentUserId = await getSessionUserId();
+
+    if (!currentUserId) {
+      return jsonError('Unauthorized', 401, 'UNAUTHORIZED');
+    }
+
+    const supabase = createServerSupabaseClient();
+
+    // Verify creator
+    const { data: trip, error: tripError } = await supabase
+      .from('trips')
+      .select('creator_id')
+      .eq('id', tripId)
+      .single();
+
+    if (tripError || !trip) {
+      return jsonError('Trip not found', 404, 'NOT_FOUND');
+    }
+
+    if (trip.creator_id !== currentUserId) {
+      return jsonError('Only the creator can delete the trip', 403, 'FORBIDDEN');
+    }
+
+    // Deleting the trip cascades to votes, attractions, and trip_members
+    // automatically — see the ON DELETE CASCADE constraints in schema.sql.
+    const { error: deleteTripError } = await supabase.from('trips').delete().eq('id', tripId);
+
+    if (deleteTripError) {
+      console.error('Error deleting trip:', deleteTripError);
+      return jsonError('Failed to delete trip', 500, 'INTERNAL_SERVER_ERROR');
+    }
+
+    return jsonSuccess({ message: 'Trip deleted successfully' });
+  } catch (error) {
+    console.error('Error in DELETE /api/trips/[tripId]:', error);
+    return jsonError('Internal server error', 500, 'INTERNAL_SERVER_ERROR');
+  }
+}
