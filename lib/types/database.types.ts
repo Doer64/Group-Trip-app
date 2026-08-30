@@ -11,6 +11,10 @@ export interface Trip {
   creator_id: string;
   invite_token: string;
   created_at?: string;
+  image_url?: string | null;
+  memberCount?: number;
+  attractionCount?: number;
+  coverImage?: string | null;
 }
 
 export interface TripMember {

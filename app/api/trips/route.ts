@@ -4,6 +4,7 @@ import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { createTripSchema } from '@/lib/validations/schemas';
 import { getSessionUserId } from '@/lib/session';
 import { jsonSuccess, jsonError } from '@/lib/apiResponse';
+import { searchPlaces } from '@/lib/services/placesService';
 
 export async function POST(req: NextRequest) {
   try {
@@ -39,13 +40,25 @@ export async function POST(req: NextRequest) {
     // 3. Generate a unique cryptographically random invite token
     const inviteToken = crypto.randomBytes(6).toString('hex');
 
-    // 4. Create the trip
+    // 4. Fetch destination cover photo from Google Places API
+    let imageUrl: string | null = null;
+    try {
+      const places = await searchPlaces(destination.trim());
+      if (places.length > 0 && places[0]?.photoRef) {
+        imageUrl = `/api/places/photo?photoRef=${encodeURIComponent(places[0].photoRef)}&maxWidth=800`;
+      }
+    } catch (photoErr) {
+      console.warn('Could not fetch destination photo from Google Places API:', photoErr);
+    }
+
+    // 5. Create the trip
     const { data: trip, error: tripError } = await supabase
       .from('trips')
       .insert({
         destination: destination.trim(),
         creator_id: creator.id,
         invite_token: inviteToken,
+        image_url: imageUrl,
       })
       .select()
       .single();
@@ -55,7 +68,7 @@ export async function POST(req: NextRequest) {
       return jsonError('Failed to create trip', 500, 'DATABASE_ERROR');
     }
 
-    // 5. Add creator as a trip member
+    // 6. Add creator as a trip member
     const { error: memberError } = await supabase
       .from('trip_members')
       .insert({
@@ -76,6 +89,7 @@ export async function POST(req: NextRequest) {
         destination: trip.destination,
         inviteToken: trip.invite_token,
         inviteUrl,
+        imageUrl: trip.image_url,
       },
       201
     );

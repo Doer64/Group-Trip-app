@@ -37,6 +37,7 @@ export async function GET(
         destination,
         creator_id,
         invite_token,
+        image_url,
         created_at,
         creator:creator_id (
           id,
@@ -73,6 +74,7 @@ export async function GET(
         destination: trip.destination,
         creator_id: trip.creator_id,
         invite_token: trip.invite_token,
+        image_url: trip.image_url,
         created_at: trip.created_at,
         creator: trip.creator,
         members,

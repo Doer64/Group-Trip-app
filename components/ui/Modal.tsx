@@ -10,6 +10,7 @@ export interface ModalProps {
   description?: string;
   children: React.ReactNode;
   maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+  overflowVisible?: boolean;
 }
 
 export function Modal({
@@ -19,6 +20,7 @@ export function Modal({
   description,
   children,
   maxWidth = 'md',
+  overflowVisible = true,
 }: ModalProps) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -59,7 +61,9 @@ export function Modal({
 
       {/* Dialog box */}
       <div
-        className={`relative w-full ${maxWidthStyles[maxWidth]} bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-10 animate-in zoom-in-95 duration-200`}
+        className={`relative w-full ${maxWidthStyles[maxWidth]} bg-white rounded-2xl shadow-xl border border-slate-100 ${
+          overflowVisible ? 'overflow-visible' : 'overflow-hidden'
+        } z-10 animate-in zoom-in-95 duration-200`}
         role="dialog"
         aria-modal="true"
       >
@@ -72,14 +76,20 @@ export function Modal({
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
+            className="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
             aria-label="Close modal"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="p-6 max-h-[80vh] overflow-y-auto">{children}</div>
+        <div
+          className={`p-6 ${
+            overflowVisible ? 'overflow-visible' : 'max-h-[80vh] overflow-y-auto'
+          }`}
+        >
+          {children}
+        </div>
       </div>
     </div>
   );

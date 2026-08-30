@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { Loader2, AlertCircle, Compass, ShieldX } from 'lucide-react';
@@ -25,6 +25,28 @@ export default function TripBoardPage() {
     castVote,
   } = useAttractions(tripId);
   const { user } = useCurrentUser();
+
+  // All hooks must be called unconditionally at the top level
+  const [sortBy, setSortBy] = useState<'newest' | 'score' | 'least_voted'>('newest');
+
+  const sortedAttractions = useMemo(() => {
+    return [...attractions].sort((a, b) => {
+      if (sortBy === 'score') {
+        const scoreA = a.likes - a.dislikes;
+        const scoreB = b.likes - b.dislikes;
+        if (scoreA !== scoreB) return scoreB - scoreA;
+      } else if (sortBy === 'least_voted') {
+        const votesA = a.likes + a.dislikes;
+        const votesB = b.likes + b.dislikes;
+        if (votesA !== votesB) return votesA - votesB;
+      }
+
+      // Default to time (newest first)
+      const timeA = new Date(a.created_at || 0).getTime();
+      const timeB = new Date(b.created_at || 0).getTime();
+      return timeB - timeA;
+    });
+  }, [attractions, sortBy]);
 
   if (isTripLoading) {
     return (
@@ -91,17 +113,37 @@ export default function TripBoardPage() {
 
       {/* Attractions Grid */}
       <div className="space-y-4 pt-2">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-slate-900 tracking-tight">
-            Proposed Attractions
-          </h2>
-          <span className="text-xs font-medium text-slate-400">
-            {attractions.length} {attractions.length === 1 ? 'place' : 'places'} • Live Voting
-          </span>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <h2 className="text-lg font-bold text-slate-900 tracking-tight">
+              Proposed Attractions
+            </h2>
+            <span className="px-2.5 py-1 rounded-full bg-slate-100 text-xs font-semibold text-slate-500">
+              {attractions.length} {attractions.length === 1 ? 'place' : 'places'}
+            </span>
+          </div>
+
+          {attractions.length > 0 && (
+            <div className="flex items-center gap-2">
+              <label htmlFor="sort-select" className="text-xs font-medium text-slate-500">
+                Sort by:
+              </label>
+              <select
+                id="sort-select"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as any)}
+                className="text-xs bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer shadow-sm"
+              >
+                <option value="newest">Recently Added</option>
+                <option value="score">Highest Score</option>
+                <option value="least_voted">Least Voted</option>
+              </select>
+            </div>
+          )}
         </div>
 
         <AttractionList
-          attractions={attractions}
+          attractions={sortedAttractions}
           isLoading={isAttractionsLoading}
           currentUserId={user?.id}
           isOrganizer={trip.isCreator}
