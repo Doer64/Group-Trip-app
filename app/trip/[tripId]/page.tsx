@@ -11,6 +11,7 @@ import { TripHeader } from '@/components/trip/TripHeader';
 import { PlacesSearchBar } from '@/components/trip/PlacesSearchBar';
 import { AttractionList } from '@/components/trip/AttractionList';
 import { Button } from '@/components/ui/Button';
+import { FlightLoader } from '@/components/ui/FlightLoader';
 
 export default function TripBoardPage() {
   const params = useParams();
@@ -48,10 +49,10 @@ export default function TripBoardPage() {
 
   if (isTripLoading) {
     return (
-      <div className="py-24 flex flex-col items-center justify-center text-slate-400 gap-3">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-        <span className="text-sm font-medium">Loading voting board...</span>
-      </div>
+      <FlightLoader
+        label="Tuning into flight radar..."
+        sublabel="Loading attractions and live ballot"
+      />
     );
   }
 
@@ -130,7 +131,7 @@ export default function TripBoardPage() {
                 id="sort-select"
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="text-xs bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 cursor-pointer shadow-2xs"
+                className="h-9 text-xs bg-white border border-slate-200 rounded-xl px-3 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 cursor-pointer shadow-2xs"
               >
                 <option value="newest">Recently Added</option>
                 <option value="score">Highest Score</option>

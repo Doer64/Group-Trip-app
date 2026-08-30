@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Loader2, AlertCircle, Compass, Sparkles, ArrowRight, Rocket, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { FlightLoader } from '@/components/ui/FlightLoader';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
 import { useToast } from '@/components/ui/Toast';
 
@@ -79,10 +80,10 @@ export default function InvitePage() {
 
   if (isLoading || isAuthLoading) {
     return (
-      <div className="py-20 flex flex-col items-center justify-center text-slate-400 gap-3">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-        <span className="text-sm font-medium">Validating invite link...</span>
-      </div>
+      <FlightLoader
+        label="Validating boarding pass..."
+        sublabel="Connecting to your flight invitation"
+      />
     );
   }
 
@@ -138,7 +139,7 @@ export default function InvitePage() {
           // Logged in — show "Jump in!" button
           <div className="space-y-3">
             <p className="text-xs sm:text-sm text-slate-600">
-              Ready to join the crew, <span className="font-bold text-slate-900">{user.name}</span>?
+              Ready to board, <span className="font-bold text-slate-900">{user.name}</span>? Fasten your seatbelt.
             </p>
             <Button
               variant="amber"
@@ -155,7 +156,7 @@ export default function InvitePage() {
           // Not logged in — show sign-in prompt
           <div className="space-y-3">
             <p className="text-xs sm:text-sm text-slate-500">
-              Sign in so your group knows who just joined.
+              Sign in so your flight crew knows who just stepped on board.
             </p>
             <Link href={loginRedirect} className="block">
               <Button

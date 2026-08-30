@@ -53,9 +53,9 @@ export function AttractionList({
     return (
       <EmptyState
         icon={<MapPin className="w-6 h-6 text-blue-600" />}
-        title="No attractions proposed yet"
-        description="Search for sights, museums, landmarks or top food spots and add them to your group's voting deck."
-        actionLabel={onOpenSearch ? 'Add First Attraction' : undefined}
+        title="No spots on the radar yet"
+        description="Search sights, landmarks, or local bites to start building your flight itinerary."
+        actionLabel={onOpenSearch ? 'Pitch First Spot' : undefined}
         onAction={onOpenSearch}
       />
     );
@@ -63,15 +63,20 @@ export function AttractionList({
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-      {attractions.map((attraction) => (
-        <AttractionCard
+      {attractions.map((attraction, index) => (
+        <div
           key={attraction.id}
-          attraction={attraction}
-          currentUserId={currentUserId}
-          isOrganizer={isOrganizer}
-          onVote={onVote}
-          onDelete={onDelete}
-        />
+          className="animate-card-reveal"
+          style={{ animationDelay: `${Math.min(index * 60, 420)}ms` }}
+        >
+          <AttractionCard
+            attraction={attraction}
+            currentUserId={currentUserId}
+            isOrganizer={isOrganizer}
+            onVote={onVote}
+            onDelete={onDelete}
+          />
+        </div>
       ))}
     </div>
   );

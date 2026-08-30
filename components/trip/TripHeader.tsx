@@ -80,31 +80,25 @@ export function TripHeader({ trip, attractionCount = 0 }: TripHeaderProps) {
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
             {/* Destination & Meta */}
             <div className="space-y-2.5 max-w-2xl">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold uppercase tracking-wider shadow-2xs">
-                <MapPin className="w-3.5 h-3.5 text-blue-300" />
-                <span>EXPEDITION</span>
-              </div>
-
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight drop-shadow-xs">
                 {trip.destination}
               </h1>
 
-              <div className="flex flex-wrap items-center gap-2 text-xs text-white/85">
-                <span className="font-semibold bg-black/20 backdrop-blur-xs px-2.5 py-1 rounded-full border border-white/10">
-                  By <strong className="text-white">{trip.creator?.name || 'Organizer'}</strong>
-                </span>
-                <span>•</span>
-                <div className="flex items-center gap-1.5 bg-black/20 backdrop-blur-xs px-2.5 py-1 rounded-lg border border-white/10">
+              <div className="flex flex-wrap items-center gap-2 text-xs text-white/90">
+                <div className="inline-flex items-center gap-1 bg-black/30 backdrop-blur-xs px-3 py-1 rounded-full border border-white/15">
+                  <span className="text-white/70">By</span>
+                  <strong className="text-white font-bold">{trip.creator?.name || 'Organizer'}</strong>
+                </div>
+
+                <div className="inline-flex items-center gap-1.5 bg-black/30 backdrop-blur-xs px-3 py-1 rounded-full border border-white/15">
                   <Users className="w-3.5 h-3.5 text-amber-300" />
                   <span>{members.length} {members.length === 1 ? 'member' : 'members'}</span>
                 </div>
+
                 {attractionCount > 0 && (
-                  <>
-                    <span>•</span>
-                    <div className="flex items-center gap-1.5 bg-black/20 backdrop-blur-xs px-2.5 py-1 rounded-lg border border-white/10">
-                      <span>{attractionCount} {attractionCount === 1 ? 'spot' : 'spots'} proposed</span>
-                    </div>
-                  </>
+                  <div className="inline-flex items-center gap-1.5 bg-black/30 backdrop-blur-xs px-3 py-1 rounded-full border border-white/15">
+                    <span>{attractionCount} {attractionCount === 1 ? 'spot' : 'spots'} proposed</span>
+                  </div>
                 )}
               </div>
             </div>
@@ -117,8 +111,7 @@ export function TripHeader({ trip, attractionCount = 0 }: TripHeaderProps) {
                   variant="danger"
                   size="sm"
                   onClick={() => setIsDeleteOpen(true)}
-                  leftIcon={<Trash2 className="w-3.5 h-3.5 text-rose-300" />}
-                  className="bg-rose-950/40 hover:bg-rose-900/60 text-rose-100 border border-rose-300/30 backdrop-blur-md cursor-pointer"
+                  leftIcon={<Trash2 className="w-4 h-4" />}
                 >
                   Delete Trip
                 </Button>
@@ -130,7 +123,6 @@ export function TripHeader({ trip, attractionCount = 0 }: TripHeaderProps) {
                 size="sm"
                 onClick={() => setIsInviteOpen(true)}
                 leftIcon={<UserPlus className="w-4 h-4 text-blue-600" />}
-                className="bg-white hover:bg-slate-50 text-slate-900 font-bold border border-white/80 shadow-xs cursor-pointer"
               >
                 Invite Crew
               </Button>
@@ -142,7 +134,6 @@ export function TripHeader({ trip, attractionCount = 0 }: TripHeaderProps) {
                     variant="amber"
                     size="sm"
                     leftIcon={<LayoutGrid className="w-4 h-4 text-slate-950" />}
-                    className="cursor-pointer"
                   >
                     Voting Deck
                   </Button>
@@ -153,7 +144,6 @@ export function TripHeader({ trip, attractionCount = 0 }: TripHeaderProps) {
                     variant="amber"
                     size="sm"
                     leftIcon={<Trophy className="w-4 h-4 text-slate-950" />}
-                    className="cursor-pointer"
                   >
                     Leaderboard
                   </Button>
@@ -172,7 +162,7 @@ export function TripHeader({ trip, attractionCount = 0 }: TripHeaderProps) {
                 {members.map((member) => (
                   <div
                     key={member.id}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/15 text-xs font-semibold text-white shadow-2xs transition-colors"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/15 text-xs font-medium text-white shadow-2xs"
                     title={member.email}
                   >
                     <div className="w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-emerald-400/20" />
@@ -203,7 +193,7 @@ export function TripHeader({ trip, attractionCount = 0 }: TripHeaderProps) {
         isOpen={isDeleteOpen}
         onClose={() => !isDeleting && setIsDeleteOpen(false)}
         title="Delete Trip"
-        description={`Are you sure you want to delete the trip to ${trip.destination}? This action cannot be undone.`}
+        description={`Are you sure you want to cancel the trip to ${trip.destination}? This will ground the flight and clear the ballot for everyone.`}
       >
         <div className="flex justify-end gap-3 mt-6">
           <Button

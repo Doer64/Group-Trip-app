@@ -17,6 +17,8 @@ export const metadata: Metadata = {
   description: 'Pitch spots, vote with your crew, and agree on the itinerary before takeoff.',
 };
 
+import { PageTransition } from '@/components/PageTransition';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -29,7 +31,7 @@ export default function RootLayout({
           <AuthProvider>
             <Navbar />
             <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
-              {children}
+              <PageTransition>{children}</PageTransition>
             </main>
           </AuthProvider>
         </ToastProvider>

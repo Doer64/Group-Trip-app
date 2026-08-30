@@ -157,7 +157,7 @@ export function DestinationInput({
           autoFocus={autoFocus}
           disabled={disabled}
           autoComplete="off"
-          className={`w-full bg-white border rounded-2xl py-2.5 pl-10 pr-3.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 transition-all shadow-2xs ${
+          className={`w-full h-11 bg-white border rounded-2xl pl-10 pr-3.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 transition-all shadow-2xs ${
             error
               ? 'border-rose-300 focus:border-rose-500 focus:ring-rose-200/50'
               : 'border-slate-200 focus:border-blue-500 focus:ring-blue-100 hover:border-slate-300'

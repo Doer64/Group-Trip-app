@@ -49,7 +49,7 @@ export function AttractionCard({
     totalVotes > 0 ? Math.round((attraction.likes / totalVotes) * 100) : null;
 
   return (
-    <div className="group relative flex flex-col bg-white rounded-3xl border border-slate-200 shadow-2xs hover:shadow-xl hover:shadow-slate-900/10 hover:-translate-y-1 hover:border-slate-300 transition-all duration-200 overflow-hidden text-left">
+    <div className="group relative flex flex-col bg-white rounded-3xl border border-slate-200 shadow-2xs hover:border-slate-300 interactive-card overflow-hidden text-left">
       {/* Image Banner */}
       <div className="relative w-full h-48 bg-slate-100 overflow-hidden shrink-0">
         {attraction.image_url && !imageError ? (
@@ -77,12 +77,13 @@ export function AttractionCard({
         <div className="absolute top-3 right-3 flex items-center gap-1.5">
           {totalVotes > 0 && (
             <div
-              className={`px-2 py-0.5 rounded-full text-[11px] font-black backdrop-blur-md shadow-2xs ${
+              key={netScore}
+              className={`px-2.5 py-0.5 rounded-full text-[11px] font-black backdrop-blur-md shadow-2xs transition-transform animate-score-pop ${
                 netScore > 0
-                  ? 'bg-emerald-600/90 text-white'
+                  ? 'bg-emerald-600 text-white'
                   : netScore < 0
-                  ? 'bg-rose-600/90 text-white'
-                  : 'bg-slate-800/90 text-slate-200'
+                  ? 'bg-rose-600 text-white'
+                  : 'bg-slate-800 text-slate-200'
               }`}
             >
               {netScore > 0 ? `+${netScore}` : netScore}
@@ -95,7 +96,7 @@ export function AttractionCard({
               type="button"
               onClick={handleDelete}
               disabled={isDeleting}
-              className="p-1.5 rounded-full bg-white/90 text-slate-400 hover:text-rose-600 hover:bg-white shadow-2xs transition-all cursor-pointer opacity-80 group-hover:opacity-100"
+              className="p-1.5 rounded-full bg-white/90 text-slate-400 hover:text-rose-600 hover:bg-white shadow-2xs transition-all cursor-pointer opacity-80 group-hover:opacity-100 active:scale-90"
               title="Remove attraction"
               aria-label="Remove attraction"
             >
@@ -106,9 +107,9 @@ export function AttractionCard({
 
         {/* Micro Approval Bar at bottom of photo */}
         {approvalPercent !== null && (
-          <div className="absolute bottom-0 inset-x-0 h-1 bg-rose-500/80">
+          <div className="absolute bottom-0 inset-x-0 h-1 bg-rose-500/80 overflow-hidden">
             <div
-              className="h-full bg-emerald-500 transition-all duration-300"
+              className="h-full bg-emerald-500 transition-all duration-500 ease-out"
               style={{ width: `${approvalPercent}%` }}
             />
           </div>

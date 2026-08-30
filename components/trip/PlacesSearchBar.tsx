@@ -244,7 +244,7 @@ export function PlacesSearchBar({
               }
             }}
             placeholder={`Search spots, food, sights in ${destination}...`}
-            className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3 pl-10 pr-10 text-sm text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-medium"
+            className="w-full h-11 bg-slate-50 border border-slate-200 rounded-2xl pl-10 pr-10 text-sm text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-medium"
           />
 
           {query && (
@@ -265,8 +265,7 @@ export function PlacesSearchBar({
           variant="secondary"
           size="md"
           onClick={() => setIsCustomOpen(true)}
-          leftIcon={<PenLine className="w-3.5 h-3.5 text-blue-600" />}
-          className="shrink-0 text-xs font-bold py-3 sm:py-2.5 justify-center cursor-pointer"
+          leftIcon={<PenLine className="w-4 h-4 text-blue-600" />}
         >
           Custom Spot
         </Button>
@@ -281,7 +280,7 @@ export function PlacesSearchBar({
               key={cat.label}
               type="button"
               onClick={() => handleCategoryClick(cat)}
-              className={`px-3 py-1.5 rounded-full text-xs font-bold shrink-0 transition-all cursor-pointer select-none active:scale-95 ${
+              className={`h-8 inline-flex items-center px-3 rounded-full text-xs font-bold shrink-0 transition-all cursor-pointer select-none active:scale-95 ${
                 isSelected
                   ? 'bg-slate-900 text-white shadow-xs'
                   : 'bg-slate-100 text-slate-700 hover:bg-slate-200/80 hover:text-slate-900'
@@ -337,7 +336,7 @@ export function PlacesSearchBar({
           {/* Results Grid: 1 col on mobile, 2 cols on tablet+ */}
           {results.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[420px] overflow-y-auto pr-1">
-              {results.map((place) => {
+              {results.map((place, index) => {
                 const isAdded = addedPlaceIds.has(place.placeId);
                 const isAdding = addingPlaceId === place.placeId;
                 const photoUrl = place.photoRef
@@ -347,11 +346,12 @@ export function PlacesSearchBar({
                 return (
                   <div
                     key={place.placeId}
-                    className={`flex flex-col justify-between p-3 rounded-2xl border transition-all ${
+                    className={`flex flex-col justify-between p-3 rounded-2xl border transition-all animate-card-reveal ${
                       isAdded
-                        ? 'bg-emerald-50/40 border-emerald-200'
+                        ? 'bg-emerald-50/50 border-emerald-200 shadow-xs'
                         : 'bg-white hover:bg-slate-50 border-slate-200 hover:border-slate-300'
                     }`}
+                    style={{ animationDelay: `${Math.min(index * 35, 200)}ms` }}
                   >
                     <div className="flex items-start gap-3 min-w-0">
                       {/* Photo Thumbnail */}
@@ -409,8 +409,10 @@ export function PlacesSearchBar({
                             <Plus className="w-3.5 h-3.5" />
                           )
                         }
-                        className={`text-xs py-1.5 px-3 h-auto ${
-                          isAdded ? 'bg-emerald-100 text-emerald-800 border-emerald-200' : ''
+                        className={`text-xs ${
+                          isAdded
+                            ? 'bg-emerald-100 text-emerald-800 border-emerald-300 animate-success-burst'
+                            : ''
                         }`}
                       >
                         {isAdded ? 'Pitched' : 'Pitch Spot'}
@@ -429,12 +431,12 @@ export function PlacesSearchBar({
         isOpen={isCustomOpen}
         onClose={() => setIsCustomOpen(false)}
         title="Pitch a Custom Spot"
-        description={`Add a place or activity in ${destination} for the crew to vote on.`}
+        description={`Secret rooftop, local hideaway, or group activity in ${destination}? Put it on the radar.`}
       >
         <form onSubmit={handleCustomSubmit} className="space-y-4 text-left">
           <Input
             label="Spot or Activity Name"
-            placeholder="e.g. Sunset drinks at Hotel rooftop, Cliff diving spot..."
+            placeholder="e.g. Sunset drinks on rooftop, Private boat tour..."
             value={customName}
             onChange={(e) => setCustomName(e.target.value)}
             required

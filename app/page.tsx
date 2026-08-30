@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/Input";
 import { Modal } from "@/components/ui/Modal";
 import { DestinationInput } from "@/components/trip/DestinationInput";
 import { TripCreateForm } from "@/components/trip/TripCreateForm";
+import { FlightLoader } from "@/components/ui/FlightLoader";
 import { Trip } from "@/lib/types/database.types";
 
 function formatDate(dateStr?: string) {
@@ -29,7 +30,7 @@ function TripCardItem({ trip }: { trip: Trip }) {
   return (
     <Link
       href={`/trip/${trip.id}`}
-      className="group relative flex flex-col justify-between bg-white rounded-3xl border border-slate-200/90 p-4 shadow-2xs hover:shadow-xl hover:shadow-slate-900/10 hover:-translate-y-1 hover:border-blue-300 transition-all duration-200 text-left overflow-hidden"
+      className="group relative flex flex-col justify-between bg-white rounded-3xl border border-slate-200/90 p-4 shadow-2xs hover:border-blue-300 interactive-card text-left overflow-hidden"
     >
       {/* Top part: Destination Title + Image */}
       <div>
@@ -66,11 +67,11 @@ function TripCardItem({ trip }: { trip: Trip }) {
       {/* Bottom Details */}
       <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
         <div className="flex items-center gap-2 text-slate-600 font-semibold">
-          <span className="inline-flex items-center gap-1 bg-slate-100 px-2 py-0.5 rounded-md text-[11px]">
+          <span className="inline-flex items-center gap-1 bg-slate-100 px-2.5 py-0.5 rounded-full text-[11px]">
             <Users className="w-3 h-3 text-slate-500" />
             {trip.memberCount || 1}
           </span>
-          <span className="inline-flex items-center gap-1 bg-slate-100 px-2 py-0.5 rounded-md text-[11px]">
+          <span className="inline-flex items-center gap-1 bg-slate-100 px-2.5 py-0.5 rounded-full text-[11px]">
             <Layers className="w-3 h-3 text-slate-500" />
             {trip.attractionCount || 0}
           </span>
@@ -169,10 +170,10 @@ export default function HomePage() {
 
   if (isAuthLoading) {
     return (
-      <div className="py-24 flex flex-col items-center justify-center text-slate-400 gap-3">
-        <div className="w-8 h-8 rounded-full border-2 border-blue-600 border-t-transparent animate-spin" />
-        <span className="text-sm font-medium">Loading...</span>
-      </div>
+      <FlightLoader
+        label="Scanning boarding passes..."
+        sublabel="Connecting to your flight hub"
+      />
     );
   }
 
@@ -187,9 +188,6 @@ export default function HomePage() {
         {/* Header Greeting */}
         <section className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 py-2">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-[11px] font-bold uppercase tracking-wider mb-2">
-              <span>✈️ EXPEDITION HUB</span>
-            </div>
             <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
               Where to next, {firstName}?
             </h1>
@@ -243,8 +241,14 @@ export default function HomePage() {
               </div>
             ) : userTrips.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-                {userTrips.map((trip) => (
-                  <TripCardItem key={trip.id} trip={trip} />
+                {userTrips.map((trip, index) => (
+                  <div
+                    key={trip.id}
+                    className="animate-card-reveal"
+                    style={{ animationDelay: `${Math.min(index * 60, 360)}ms` }}
+                  >
+                    <TripCardItem trip={trip} />
+                  </div>
                 ))}
               </div>
             ) : (
@@ -255,10 +259,10 @@ export default function HomePage() {
                 </div>
                 <div>
                   <h3 className="text-base font-extrabold text-slate-900">
-                    The departure board is empty
+                    The departure board is clear
                   </h3>
                   <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto leading-relaxed">
-                    Create a trip, invite your group, and start pitching attractions.
+                    No flights booked yet. Pick a destination and rally your cabin crew.
                   </p>
                 </div>
                 <div className="flex items-center justify-center gap-3 pt-2">
@@ -291,7 +295,7 @@ export default function HomePage() {
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           title="Create a New Trip"
-          description="Enter a destination to start planning attractions with your crew."
+          description="Pick a destination to start packing the itinerary with your crew."
         >
           <TripCreateForm
             onSuccess={(newTripId) => {
@@ -306,7 +310,7 @@ export default function HomePage() {
           isOpen={isJoinModalOpen}
           onClose={() => setIsJoinModalOpen(false)}
           title="Join an Existing Trip"
-          description="Enter an invite code or URL shared by the trip organizer."
+          description="Enter a boarding code or invite link shared by your trip organizer."
         >
           <form
             onSubmit={(e) => {
@@ -348,11 +352,6 @@ export default function HomePage() {
     <div className="space-y-10 py-6 sm:py-10 text-center max-w-4xl mx-auto">
       {/* Playful Hero Section */}
       <section className="space-y-4 relative">
-        <div className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 border border-blue-100 px-3.5 py-1.5 text-xs font-bold text-blue-700 shadow-2xs">
-          <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-          <span>GROUP TRAVEL CONSENSUS</span>
-        </div>
-
         <h1 className="text-4xl sm:text-6xl font-black text-slate-900 tracking-tight leading-[1.05]">
           Pick the trip.<br />
           <span className="text-blue-600">Skip the group chat drama.</span>
@@ -364,12 +363,9 @@ export default function HomePage() {
 
         <div className="pt-1">
           <Link href="/login">
-            <button
-              type="button"
-              className="inline-flex items-center justify-center px-6 py-2.5 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs shadow-sm transition-all hover:-translate-y-0.5 active:scale-95 cursor-pointer border border-slate-200"
-            >
+            <Button variant="secondary" size="md">
               Sign In to Your Account
-            </button>
+            </Button>
           </Link>
         </div>
       </section>
@@ -387,7 +383,7 @@ export default function HomePage() {
                 Start a New Trip
               </h2>
               <p className="text-xs text-slate-500 mt-1">
-                Name your destination and start building the ballot.
+                Pick a destination and open the gate for your group.
               </p>
             </div>
 
@@ -402,14 +398,16 @@ export default function HomePage() {
             />
 
             <div className="pt-2">
-              <button
+              <Button
                 type="submit"
-                disabled={isCreatingLoggedOut}
-                className="w-full py-3 px-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md shadow-blue-600/20 transition-all hover:-translate-y-0.5 active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2"
+                variant="primary"
+                size="lg"
+                className="w-full font-bold"
+                isLoading={isCreatingLoggedOut}
+                rightIcon={<ArrowRight className="w-4 h-4" />}
               >
-                <span>{isCreatingLoggedOut ? "Starting..." : "Create Trip"}</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
+                Create Trip
+              </Button>
             </div>
           </form>
         </div>
@@ -438,7 +436,7 @@ export default function HomePage() {
                 Join a Friend&apos;s Trip
               </h2>
               <p className="text-xs text-slate-500 mt-1">
-                Paste the invite link or code to join the voting.
+                Got a boarding code or link? Step right on board.
               </p>
             </div>
 
@@ -453,13 +451,15 @@ export default function HomePage() {
             </div>
 
             <div className="pt-2">
-              <button
+              <Button
                 type="submit"
-                className="w-full py-3 px-4 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-sm shadow-md shadow-amber-400/20 transition-all hover:-translate-y-0.5 active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2"
+                variant="amber"
+                size="lg"
+                className="w-full font-bold"
+                rightIcon={<ArrowRight className="w-4 h-4" />}
               >
-                <span>Join In</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
+                Join In
+              </Button>
             </div>
           </form>
         </div>
@@ -471,16 +471,16 @@ export default function HomePage() {
           <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-2 font-black text-xs">
             1
           </div>
-          <h4 className="text-sm font-bold text-slate-900">Pitch Attractions</h4>
-          <p className="text-xs text-slate-500 mt-1">Search sights, food spots, or landmarks with Google Places.</p>
+          <h4 className="text-sm font-bold text-slate-900">Pitch Spots</h4>
+          <p className="text-xs text-slate-500 mt-1">Add sights, landmarks, and food joints to the flight plan.</p>
         </div>
 
         <div className="p-4 rounded-2xl bg-white/60 border border-slate-200/60">
           <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mb-2 font-black text-xs">
             2
           </div>
-          <h4 className="text-sm font-bold text-slate-900">Vote Live</h4>
-          <p className="text-xs text-slate-500 mt-1">Everyone casts thumbs up/down to show what they love.</p>
+          <h4 className="text-sm font-bold text-slate-900">Vote with the Crew</h4>
+          <p className="text-xs text-slate-500 mt-1">Thumbs up or down before anyone buys non-refundable tickets.</p>
         </div>
 
         <div className="p-4 rounded-2xl bg-white/60 border border-slate-200/60">
@@ -488,7 +488,7 @@ export default function HomePage() {
             3
           </div>
           <h4 className="text-sm font-bold text-slate-900">Consensus Leaderboard</h4>
-          <p className="text-xs text-slate-500 mt-1">See top-ranked activities computed automatically.</p>
+          <p className="text-xs text-slate-500 mt-1">Top-voted activities climb to first class automatically.</p>
         </div>
       </div>
     </div>

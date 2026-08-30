@@ -101,7 +101,7 @@ function LoginForm() {
                   Sign In
                 </h1>
                 <p className="text-xs text-slate-500 mt-1">
-                  Enter your email to continue. No password needed.
+                  Enter your email to board. No password needed.
                 </p>
               </div>
 
@@ -164,7 +164,7 @@ function LoginForm() {
                   Welcome to the crew!
                 </h1>
                 <p className="text-xs text-slate-500 mt-1">
-                  What should your group call you?
+                  What name should we print on your boarding pass?
                 </p>
               </div>
 
@@ -177,7 +177,7 @@ function LoginForm() {
                   required
                   autoFocus
                   leftIcon={<UserIcon className="w-4 h-4" />}
-                  helperText="Visible to members on your trips"
+                  helperText="Visible to your fellow travelers"
                 />
 
                 {error && (

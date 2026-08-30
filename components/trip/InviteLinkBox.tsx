@@ -48,7 +48,7 @@ export function InviteLinkBox({ inviteToken, destination }: InviteLinkBoxProps) 
           type="text"
           readOnly
           value={inviteUrl}
-          className="flex-1 bg-slate-50 border border-slate-200 rounded-2xl px-3.5 py-2.5 text-xs text-slate-800 font-mono select-all focus:outline-none focus:border-blue-500"
+          className="flex-1 h-9 bg-slate-50 border border-slate-200 rounded-xl px-3.5 text-xs text-slate-800 font-mono select-all focus:outline-none focus:border-blue-500"
         />
         <Button
           size="sm"
@@ -67,7 +67,7 @@ export function InviteLinkBox({ inviteToken, destination }: InviteLinkBoxProps) 
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-100 text-xs font-bold transition-colors"
+          className="h-9 inline-flex items-center gap-1.5 px-3.5 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-100 text-xs font-bold transition-colors"
         >
           <MessageCircle className="w-3.5 h-3.5" />
           <span>Share to WhatsApp</span>

@@ -6,6 +6,7 @@ import { Loader2, AlertCircle } from 'lucide-react';
 import { useTrip } from '@/hooks/useTrip';
 import { TripHeader } from '@/components/trip/TripHeader';
 import { ResultsList } from '@/components/trip/ResultsList';
+import { FlightLoader } from '@/components/ui/FlightLoader';
 import { RankedAttraction } from '@/lib/types/database.types';
 
 export default function TripResultsPage() {
@@ -43,10 +44,10 @@ export default function TripResultsPage() {
 
   if (isTripLoading || isLoading) {
     return (
-      <div className="py-24 flex flex-col items-center justify-center text-slate-400 gap-3">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-        <span className="text-sm font-medium">Computing group consensus...</span>
-      </div>
+      <FlightLoader
+        label="Tallying group votes..."
+        sublabel="Ranking First Class picks and final consensus"
+      />
     );
   }
 
