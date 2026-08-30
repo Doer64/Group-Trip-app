@@ -32,7 +32,7 @@ export function AttractionList({
         {[1, 2, 3, 4, 5, 6].map((i) => (
           <div
             key={i}
-            className="flex flex-col bg-white rounded-2xl border border-slate-200/60 overflow-hidden shadow-xs"
+            className="flex flex-col bg-white/80 rounded-3xl border border-indigo-100 overflow-hidden shadow-sm"
           >
             <Skeleton className="w-full h-48 rounded-none" />
             <div className="p-4 space-y-3">

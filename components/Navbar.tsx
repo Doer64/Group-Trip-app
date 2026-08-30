@@ -10,14 +10,14 @@ export function Navbar() {
   const { user, isAuthenticated, logout } = useCurrentUser();
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/80 backdrop-blur-md">
+    <header className="sticky top-0 z-40 w-full border-b border-white/70 bg-[#f7f7ff]/75 backdrop-blur-xl">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-2.5 text-slate-900 font-extrabold text-lg tracking-tight hover:opacity-90 transition-opacity"
+          className="flex items-center gap-2.5 text-indigo-950 font-black text-lg tracking-tight hover:opacity-90 transition-opacity"
         >
-          <div className="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-xs">
+          <div className="w-9 h-9 rounded-xl bg-linear-to-br from-indigo-600 to-violet-500 text-white flex items-center justify-center shadow-md shadow-indigo-200 rotate-[-5deg] transition-transform group-hover:rotate-0">
             <Compass className="w-5 h-5" />
           </div>
           <span>GroupTrip</span>
@@ -27,14 +27,14 @@ export function Navbar() {
         <div className="flex items-center gap-3 text-sm">
           {isAuthenticated && user ? (
             <div className="flex items-center gap-3">
-              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100/80 text-slate-700 text-xs font-semibold">
-                <UserIcon className="w-3.5 h-3.5 text-slate-500" />
+              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/90 border border-indigo-100 text-indigo-800 text-xs font-bold shadow-xs">
+                <UserIcon className="w-3.5 h-3.5 text-violet-500" />
                 <span>{user.name}</span>
               </div>
               <button
                 type="button"
                 onClick={logout}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-indigo-400 hover:text-indigo-900 hover:bg-white transition-colors cursor-pointer"
                 title="Sign out"
               >
                 <LogOut className="w-3.5 h-3.5" />

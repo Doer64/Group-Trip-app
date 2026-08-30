@@ -103,7 +103,8 @@ export default function TripBoardPage() {
       <TripHeader trip={trip} attractionCount={attractions.length} />
 
       {/* Places Search Bar */}
-      <div className="max-w-2xl">
+      <div className="max-w-2xl relative">
+        <p className="text-xs font-black tracking-[0.16em] text-violet-500 mb-2 ml-1">THE IDEA MACHINE</p>
         <PlacesSearchBar
           tripId={trip.id}
           destination={trip.destination}
@@ -115,24 +116,24 @@ export default function TripBoardPage() {
       <div className="space-y-4 pt-2">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <h2 className="text-lg font-bold text-slate-900 tracking-tight">
-              Proposed Attractions
+            <h2 className="text-xl font-black text-indigo-950 tracking-tight">
+              The contenders
             </h2>
-            <span className="px-2.5 py-1 rounded-full bg-slate-100 text-xs font-semibold text-slate-500">
+            <span className="px-2.5 py-1 rounded-full bg-violet-100 text-xs font-black text-violet-600">
               {attractions.length} {attractions.length === 1 ? 'place' : 'places'}
             </span>
           </div>
 
           {attractions.length > 0 && (
             <div className="flex items-center gap-2">
-              <label htmlFor="sort-select" className="text-xs font-medium text-slate-500">
+              <label htmlFor="sort-select" className="text-xs font-bold text-indigo-500">
                 Sort by:
               </label>
               <select
                 id="sort-select"
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="text-xs bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer shadow-sm"
+                className="text-xs bg-white border border-indigo-100 rounded-xl px-2.5 py-1.5 text-indigo-700 font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer shadow-sm"
               >
                 <option value="newest">Recently Added</option>
                 <option value="score">Highest Score</option>

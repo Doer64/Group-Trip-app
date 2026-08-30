@@ -61,22 +61,22 @@ export function Modal({
 
       {/* Dialog box */}
       <div
-        className={`relative w-full ${maxWidthStyles[maxWidth]} bg-white rounded-2xl shadow-xl border border-slate-100 ${
+        className={`relative w-full ${maxWidthStyles[maxWidth]} bg-[#fffeff] rounded-3xl shadow-2xl shadow-indigo-950/15 border border-white ${
           overflowVisible ? 'overflow-visible' : 'overflow-hidden'
         } z-10 animate-in zoom-in-95 duration-200`}
         role="dialog"
         aria-modal="true"
       >
-        <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-slate-100">
+        <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-indigo-100/70">
           <div>
-            {title && <h3 className="text-lg font-semibold text-slate-900">{title}</h3>}
+            {title && <h3 className="text-lg font-black text-indigo-950">{title}</h3>}
             {description && (
-              <p className="text-xs text-slate-500 mt-0.5">{description}</p>
+              <p className="text-xs text-indigo-500 mt-0.5">{description}</p>
             )}
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+            className="text-indigo-300 hover:text-indigo-700 p-1.5 rounded-lg hover:bg-indigo-50 transition-colors cursor-pointer"
             aria-label="Close modal"
           >
             <X className="w-5 h-5" />

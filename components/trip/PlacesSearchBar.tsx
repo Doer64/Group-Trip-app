@@ -117,22 +117,22 @@ export function PlacesSearchBar({
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="w-full flex items-center justify-between px-4 py-3 bg-white hover:bg-slate-50 border border-slate-200/90 rounded-2xl shadow-xs hover:shadow transition-all text-slate-400 group cursor-pointer"
+        className="w-full flex items-center justify-between px-4 py-3.5 bg-white/90 hover:bg-white border border-violet-100 rounded-3xl shadow-md shadow-violet-100/60 hover:shadow-lg hover:-translate-y-0.5 transition-all text-indigo-400 group cursor-pointer"
       >
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:scale-105 transition-transform">
+          <div className="w-9 h-9 rounded-xl bg-amber-100 text-violet-600 flex items-center justify-center group-hover:scale-110 group-hover:rotate-6 transition-transform">
             <Search className="w-4 h-4" />
           </div>
           <div className="text-left">
-            <span className="block text-sm font-medium text-slate-700">
-              Suggest an attraction in {destination}...
+            <span className="block text-sm font-black text-indigo-900">
+              Pitch an attraction in {destination}
             </span>
-            <span className="block text-[11px] text-slate-400">
-              Search museums, restaurants, landmarks, viewpoints
+            <span className="block text-[11px] text-indigo-400">
+              Museums, food, landmarks—whatever earns the group’s vote.
             </span>
           </div>
         </div>
-        <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 text-xs font-semibold text-slate-600">
+        <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-violet-100 text-xs font-black text-violet-700">
           <Plus className="w-3.5 h-3.5" />
           <span>Add Attraction</span>
         </div>
@@ -147,20 +147,20 @@ export function PlacesSearchBar({
           setResults([]);
         }}
         title={`Search Attractions in ${destination}`}
-        description="Find points of interest and add them to your group's voting board."
+        description="Find somewhere great and add it to the group’s highly scientific voting board."
         maxWidth="lg"
       >
         <div className="space-y-4 text-left">
           {/* Search Input Box */}
           <div className="relative flex items-center">
-            <Search className="absolute left-3.5 w-4 h-4 text-slate-400 pointer-events-none" />
+            <Search className="absolute left-3.5 w-4 h-4 text-violet-400 pointer-events-none" />
             <input
               type="text"
               autoFocus
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={`e.g. Colosseum, Louvre Museum, Best Gelato...`}
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 pl-10 pr-10 text-sm text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all"
+              className="w-full bg-violet-50/60 border border-violet-100 rounded-2xl py-3 pl-10 pr-10 text-sm text-indigo-950 placeholder:text-indigo-300 focus:bg-white focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100 transition-all"
             />
             {isSearching && (
               <Loader2 className="absolute right-3.5 w-4 h-4 text-slate-400 animate-spin" />
@@ -168,24 +168,24 @@ export function PlacesSearchBar({
           </div>
 
           {/* Results List */}
-          <div className="mt-2 divide-y divide-slate-100 max-h-[380px] overflow-y-auto">
+          <div className="mt-2 divide-y divide-indigo-50 max-h-[380px] overflow-y-auto">
             {isSearching && results.length === 0 && (
-              <div className="py-8 flex flex-col items-center justify-center text-slate-400 text-xs gap-2">
+              <div className="py-8 flex flex-col items-center justify-center text-indigo-400 text-xs gap-2">
                 <Loader2 className="w-5 h-5 animate-spin text-indigo-500" />
                 <span>Searching Google Places in {destination}...</span>
               </div>
             )}
 
             {!isSearching && searchError && (
-              <div className="py-6 text-center text-xs text-slate-500 bg-slate-50 rounded-xl p-4">
+              <div className="py-6 text-center text-xs text-indigo-500 bg-violet-50 rounded-2xl p-4">
                 {searchError}
               </div>
             )}
 
             {!isSearching && !searchError && query.length < 2 && (
-              <div className="py-8 flex flex-col items-center justify-center text-center text-slate-400 text-xs">
-                <Sparkles className="w-6 h-6 text-slate-300 mb-2" />
-                <span>Type place name or category to search</span>
+              <div className="py-8 flex flex-col items-center justify-center text-center text-indigo-400 text-xs">
+                <Sparkles className="w-6 h-6 text-amber-400 mb-2" />
+                <span>Type a place or category and uncover a contender.</span>
               </div>
             )}
 
@@ -199,10 +199,10 @@ export function PlacesSearchBar({
               return (
                 <div
                   key={place.placeId}
-                  className="py-3 flex items-center justify-between gap-3 hover:bg-slate-50/60 p-2 rounded-xl transition-colors"
+                  className="py-3 flex items-center justify-between gap-3 hover:bg-violet-50/60 p-2 rounded-2xl transition-colors"
                 >
                   {/* Photo thumbnail */}
-                  <div className="w-14 h-14 rounded-xl bg-slate-100 overflow-hidden shrink-0 border border-slate-200/60">
+                  <div className="w-14 h-14 rounded-2xl bg-indigo-50 overflow-hidden shrink-0 border border-indigo-100">
                     {photoUrl ? (
                       <img
                         src={photoUrl}
@@ -210,7 +210,7 @@ export function PlacesSearchBar({
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-slate-300">
+                      <div className="w-full h-full flex items-center justify-center text-indigo-300">
                         <MapPin className="w-5 h-5" />
                       </div>
                     )}
@@ -218,11 +218,11 @@ export function PlacesSearchBar({
 
                   {/* Title & address */}
                   <div className="flex-1 min-w-0">
-                    <h5 className="text-sm font-semibold text-slate-900 truncate">
+                    <h5 className="text-sm font-black text-indigo-950 truncate">
                       {place.name}
                     </h5>
                     {place.formattedAddress && (
-                      <p className="text-xs text-slate-500 truncate mt-0.5">
+                      <p className="text-xs text-indigo-500 truncate mt-0.5">
                         {place.formattedAddress}
                       </p>
                     )}

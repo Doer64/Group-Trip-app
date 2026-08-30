@@ -29,19 +29,19 @@ function TripCardItem({ trip }: { trip: Trip }) {
   return (
     <Link
       href={`/trip/${trip.id}`}
-      className="group relative flex flex-col justify-between bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs hover:shadow-md hover:border-indigo-300 transition-all text-left"
+      className="group relative flex flex-col justify-between bg-white/90 rounded-3xl border border-indigo-100 p-4 shadow-sm shadow-indigo-100/50 hover:shadow-xl hover:shadow-indigo-200/40 hover:-translate-y-1 hover:border-violet-300 transition-all text-left overflow-hidden"
     >
       {/* Top part: Destination Title + Image */}
       <div>
         <div className="flex items-center justify-between gap-2 mb-3">
-          <h3 className="text-base font-bold text-slate-900 group-hover:text-indigo-600 transition-colors truncate">
+          <h3 className="text-base font-black text-indigo-950 group-hover:text-violet-600 transition-colors truncate">
             {trip.destination}
           </h3>
-          <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition-all shrink-0" />
+          <ArrowRight className="w-4 h-4 text-indigo-300 group-hover:text-violet-600 group-hover:translate-x-0.5 transition-all shrink-0" />
         </div>
 
         {/* Image Thumbnail */}
-        <div className="w-full h-28 rounded-xl bg-slate-100 overflow-hidden mb-3 relative">
+        <div className="w-full h-28 rounded-2xl bg-indigo-50 overflow-hidden mb-3 relative">
           {imageUrl && !imageError ? (
             <img
               src={imageUrl}
@@ -51,8 +51,8 @@ function TripCardItem({ trip }: { trip: Trip }) {
               loading="lazy"
             />
           ) : (
-            <div className="w-full h-full flex flex-col items-center justify-center bg-linear-to-br from-indigo-50/50 to-slate-100 text-slate-400">
-              <MapPin className="w-6 h-6 mb-1 text-indigo-400 opacity-70" />
+            <div className="w-full h-full flex flex-col items-center justify-center bg-linear-to-br from-violet-100 to-cyan-100 text-indigo-400">
+              <MapPin className="w-6 h-6 mb-1 text-violet-500 opacity-70" />
               <span className="text-[10px] font-medium tracking-wide truncate max-w-[90%] px-1">
                 {trip.destination}
               </span>
@@ -62,14 +62,14 @@ function TripCardItem({ trip }: { trip: Trip }) {
       </div>
 
       {/* Bottom Details */}
-      <div className="pt-2 border-t border-slate-100 space-y-1">
-        <p className="text-xs text-slate-600 font-medium truncate">
+      <div className="pt-2 border-t border-indigo-50 space-y-1">
+        <p className="text-xs text-indigo-600 font-bold truncate">
           {trip.memberCount || 1}{" "}
           {(trip.memberCount || 1) === 1 ? "member" : "members"} |{" "}
           {trip.attractionCount || 0}{" "}
           {(trip.attractionCount || 0) === 1 ? "place" : "places"}
         </p>
-        <p className="text-[11px] text-slate-400 font-medium">
+        <p className="text-[11px] text-indigo-300 font-medium">
           {formatDate(trip.created_at)}
         </p>
       </div>
@@ -179,11 +179,12 @@ export default function HomePage() {
     const firstName = user.name ? user.name.split(" ")[0] : "there";
 
     return (
-      <div className="space-y-8 text-left py-4">
+      <div className="space-y-8 text-left py-3 sm:py-5">
         {/* Title */}
-        <section className="text-center py-4">
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Where are we flying, {firstName}?
+        <section className="text-center py-4 sm:py-7">
+          <p className="text-xs font-black tracking-[0.2em] text-violet-500 mb-3">YOUR TRIP HQ</p>
+          <h1 className="text-3xl sm:text-5xl font-black text-indigo-950 tracking-[-0.04em]">
+            Where to next, {firstName}? <span className="inline-block rotate-[-8deg]">✈️</span>
           </h1>
         </section>
 
@@ -191,7 +192,7 @@ export default function HomePage() {
         <div className="space-y-4">
           {/* Header Row */}
           <div className="flex items-center justify-between gap-4">
-            <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+            <h2 className="text-xl font-black text-indigo-950 tracking-tight">
               Your Trips
             </h2>
 
@@ -202,7 +203,7 @@ export default function HomePage() {
                 size="sm"
                 onClick={() => setIsJoinModalOpen(true)}
                 leftIcon={<KeyRound className="w-4 h-4 text-slate-500" />}
-                className="font-semibold text-xs"
+                className="font-bold text-xs"
               >
                 Join with Code
               </Button>
@@ -212,7 +213,7 @@ export default function HomePage() {
                 size="sm"
                 onClick={() => setIsCreateModalOpen(true)}
                 leftIcon={<Plus className="w-4 h-4" />}
-                className="bg-emerald-500 hover:bg-emerald-600 font-semibold text-xs shadow-xs"
+                className="bg-linear-to-br from-amber-300 to-orange-400 hover:from-amber-400 hover:to-orange-500 text-indigo-950 font-black text-xs shadow-md shadow-amber-200"
               >
                 New Trip
               </Button>
@@ -220,13 +221,13 @@ export default function HomePage() {
           </div>
 
           {/* Trips Container Card */}
-          <div className="bg-white rounded-3xl border border-slate-200/80 p-5 sm:p-7 shadow-xs min-h-[220px]">
+          <div className="bg-white/75 rounded-[2rem] border border-white p-5 sm:p-7 shadow-xl shadow-indigo-100/50 min-h-[220px]">
             {isLoadingTrips ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
                 {[1, 2, 3].map((i) => (
                   <div
                     key={i}
-                    className="h-44 rounded-2xl bg-slate-100 animate-pulse border border-slate-200/60"
+                    className="h-44 rounded-3xl bg-indigo-100/70 animate-pulse border border-indigo-100"
                   />
                 ))}
               </div>
@@ -239,16 +240,15 @@ export default function HomePage() {
             ) : (
               /* Empty state */
               <div className="py-12 text-center space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto">
+                <div className="w-14 h-14 rounded-2xl bg-amber-100 text-violet-600 flex items-center justify-center mx-auto shadow-sm rotate-[-5deg]">
                   <Compass className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-slate-900">
-                    No trips planned yet
+                  <h3 className="text-base font-black text-indigo-950">
+                    The departure board is empty
                   </h3>
-                  <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-                    Start a new trip to begin proposing attractions and voting
-                    with friends, or join one with an invite code.
+                  <p className="text-xs text-indigo-500 mt-1 max-w-sm mx-auto">
+                    Give your group chat a mission: create a trip, invite the crew, then let the attractions battle it out.
                   </p>
                 </div>
                 <div className="flex items-center justify-center gap-3 pt-2">
@@ -257,7 +257,7 @@ export default function HomePage() {
                     variant="primary"
                     size="md"
                     onClick={() => setIsCreateModalOpen(true)}
-                    className="bg-emerald-500 hover:bg-emerald-600 font-semibold"
+                    className="bg-linear-to-br from-amber-300 to-orange-400 hover:from-amber-400 hover:to-orange-500 text-indigo-950 font-black shadow-md shadow-amber-200"
                     leftIcon={<Plus className="w-4 h-4" />}
                   >
                     Create a Trip
@@ -336,18 +336,24 @@ export default function HomePage() {
   // VIEW 2: LOGGED OUT
   // ==========================================
   return (
-    <div className="space-y-10 py-6 text-center max-w-4xl mx-auto">
+    <div className="space-y-10 py-4 sm:py-8 text-center max-w-4xl mx-auto">
       {/* Title & Prominent Log In Button */}
-      <section className="space-y-6">
-        <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-          Planning a trip with friends?
+      <section className="space-y-5 relative">
+        <div className="inline-flex items-center gap-2 rounded-full bg-white/80 border border-violet-100 px-4 py-2 text-xs font-black text-violet-600 shadow-sm">
+          <span className="text-base leading-none">✦</span> GROUP TRIPS, ZERO GROUP CHAT CHAOS
+        </div>
+        <h1 className="text-4xl sm:text-6xl font-black text-indigo-950 tracking-[-0.04em] leading-[0.98]">
+          Pick the trip.<br /><span className="text-transparent bg-clip-text bg-linear-to-r from-violet-600 via-indigo-600 to-cyan-500">Skip the drama.</span>
         </h1>
+        <p className="max-w-xl mx-auto text-sm sm:text-base leading-relaxed text-indigo-600">
+          Gather your crew, toss in the must-sees, and let the votes settle the “but I wanted pizza” debate.
+        </p>
 
         <div>
           <Link href="/login">
             <button
               type="button"
-              className="inline-flex items-center justify-center px-10 py-3.5 rounded-2xl bg-cyan-200 hover:bg-cyan-300 text-slate-900 font-bold text-base shadow-xs transition-all hover:scale-105 active:scale-95 cursor-pointer border border-cyan-300/60"
+              className="inline-flex items-center justify-center px-7 py-3 rounded-2xl bg-white hover:bg-indigo-50 text-indigo-800 font-black text-sm shadow-md shadow-indigo-200/40 transition-all hover:-translate-y-0.5 active:scale-95 cursor-pointer border border-indigo-100"
             >
               Log In
             </button>
@@ -356,16 +362,17 @@ export default function HomePage() {
       </section>
 
       {/* Side-by-Side Action Cards with 'OR' */}
-      <div className="relative flex flex-col md:flex-row items-stretch justify-center gap-6 pt-4">
+      <div className="relative flex flex-col md:flex-row items-stretch justify-center gap-6 pt-2">
         {/* Left Card: Create Trip */}
-        <div className="flex-1 bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-xs text-left flex flex-col justify-between">
+        <div className="flex-1 bg-white/90 p-6 sm:p-8 rounded-[2rem] border border-violet-100 shadow-xl shadow-violet-100/50 text-left flex flex-col justify-between relative overflow-hidden">
+          <div className="absolute -top-8 -right-6 text-7xl opacity-10 rotate-12">🗺️</div>
           <form onSubmit={handleLoggedOutCreate} className="space-y-5">
             <div>
-              <h2 className="text-lg font-bold text-slate-900">
-                Where are you traveling to?
+              <h2 className="text-xl font-black text-indigo-950">
+                Start a fresh escape
               </h2>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Type any city or country to get started
+              <p className="text-xs text-indigo-500 mt-1">
+                Name a destination. We’ll handle the friendly campaigning.
               </p>
             </div>
 
@@ -383,7 +390,7 @@ export default function HomePage() {
               <button
                 type="submit"
                 disabled={isCreatingLoggedOut}
-                className="w-full py-3 px-4 rounded-xl bg-amber-300 hover:bg-amber-400 text-slate-900 font-bold text-sm shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2 border border-amber-400/50"
+                className="w-full py-3 px-4 rounded-2xl bg-amber-300 hover:bg-amber-400 text-indigo-950 font-black text-sm shadow-md shadow-amber-200/60 transition-all hover:-translate-y-0.5 active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2 border border-amber-400/50"
               >
                 <span>{isCreatingLoggedOut ? "Starting..." : "Let's Go!"}</span>
                 <ArrowRight className="w-4 h-4" />
@@ -394,13 +401,14 @@ export default function HomePage() {
 
         {/* Centered OR Divider */}
         <div className="flex items-center justify-center -my-2 md:-mx-3 z-10">
-          <div className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-xs font-bold text-slate-400 shadow-xs">
+          <div className="w-11 h-11 rounded-full bg-indigo-950 border-4 border-[#f7f7ff] flex items-center justify-center text-[10px] font-black text-white shadow-md">
             OR
           </div>
         </div>
 
         {/* Right Card: Join Trip */}
-        <div className="flex-1 bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-xs text-left flex flex-col justify-between">
+        <div className="flex-1 bg-white/90 p-6 sm:p-8 rounded-[2rem] border border-cyan-100 shadow-xl shadow-cyan-100/50 text-left flex flex-col justify-between relative overflow-hidden">
+          <div className="absolute -top-8 -right-6 text-7xl opacity-10 rotate-12">🎟️</div>
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -409,11 +417,11 @@ export default function HomePage() {
             className="space-y-5"
           >
             <div>
-              <h2 className="text-lg font-bold text-slate-900">
-                Do you have an invite?
+              <h2 className="text-xl font-black text-indigo-950">
+                Your crew called
               </h2>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Paste an invite code or full URL to jump in
+              <p className="text-xs text-indigo-500 mt-1">
+                Paste the invite and join the adventure planning squad.
               </p>
             </div>
 
@@ -430,7 +438,7 @@ export default function HomePage() {
             <div className="pt-2">
               <button
                 type="submit"
-                className="w-full py-3 px-4 rounded-xl bg-emerald-400 hover:bg-emerald-500 text-slate-900 font-bold text-sm shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2 border border-emerald-500/50"
+                className="w-full py-3 px-4 rounded-2xl bg-cyan-300 hover:bg-cyan-400 text-indigo-950 font-black text-sm shadow-md shadow-cyan-200/60 transition-all hover:-translate-y-0.5 active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2 border border-cyan-400/50"
               >
                 <span>Join in!</span>
                 <ArrowRight className="w-4 h-4" />

@@ -78,32 +78,32 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-[60vh] flex items-center justify-center py-6">
+    <div className="min-h-[65vh] flex items-center justify-center py-6">
       <div className="w-full max-w-md">
         {/* Contextual message banner */}
         {message && (
-          <div className="mb-6 bg-indigo-50 border border-indigo-100 rounded-2xl p-4 text-center">
-            <Sparkles className="w-5 h-5 text-indigo-500 mx-auto mb-2" />
-            <p className="text-sm text-indigo-900 font-medium leading-relaxed">
+          <div className="mb-6 bg-amber-50/90 border border-amber-200 rounded-3xl p-4 text-center shadow-sm">
+            <Sparkles className="w-5 h-5 text-amber-500 mx-auto mb-2" />
+            <p className="text-sm text-indigo-900 font-bold leading-relaxed">
               {message}
             </p>
           </div>
         )}
 
         {/* Card */}
-        <div className="bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-8 shadow-sm">
+        <div className="bg-white/90 rounded-[2rem] border border-white p-6 sm:p-8 shadow-xl shadow-indigo-200/50">
           {step === 'email' ? (
             /* STEP 1: Email Only */
             <>
               <div className="text-center mb-6">
-                <div className="w-12 h-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center mx-auto mb-3">
+                <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-violet-500 to-indigo-600 text-white flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-200 rotate-[-6deg]">
                   <Compass className="w-6 h-6" />
                 </div>
-                <h1 className="text-2xl font-bold text-slate-900">
-                  Sign in to GroupTrip
+                <h1 className="text-2xl font-black text-indigo-950">
+                  Hello, fellow escape artist
                 </h1>
-                <p className="text-xs text-slate-500 mt-1">
-                  Enter your email to get started. No password needed.
+                <p className="text-xs text-indigo-500 mt-1">
+                  Enter your email. No passwords, no paperwork, no boring bits.
                 </p>
               </div>
 
@@ -128,7 +128,7 @@ function LoginForm() {
                     type="submit"
                     variant="primary"
                     size="lg"
-                    className="w-full font-semibold"
+                    className="w-full font-black"
                     isLoading={isLoading}
                     rightIcon={<ArrowRight className="w-4 h-4" />}
                   >
@@ -147,26 +147,26 @@ function LoginForm() {
                     setStep('email');
                     setError(null);
                   }}
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-500 hover:text-indigo-900 transition-colors cursor-pointer"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" />
                   <span>Change email</span>
                 </button>
 
-                <span className="text-[11px] font-medium text-slate-400 truncate max-w-[180px]">
+                <span className="text-[11px] font-medium text-indigo-300 truncate max-w-[180px]">
                   {email}
                 </span>
               </div>
 
               <div className="text-center mb-6">
-                <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto mb-3">
+                <div className="w-14 h-14 rounded-2xl bg-cyan-100 text-indigo-600 flex items-center justify-center mx-auto mb-4 shadow-sm rotate-[5deg]">
                   <UserPlus className="w-6 h-6" />
                 </div>
-                <h1 className="text-2xl font-bold text-slate-900">
-                  Welcome to GroupTrip!
+                <h1 className="text-2xl font-black text-indigo-950">
+                  Nice to meet you!
                 </h1>
-                <p className="text-xs text-slate-500 mt-1">
-                  Looks like you&apos;re new here. What should your friends call you?
+                <p className="text-xs text-indigo-500 mt-1">
+                  What should your travel crew call you?
                 </p>
               </div>
 
@@ -191,7 +191,7 @@ function LoginForm() {
                     type="submit"
                     variant="primary"
                     size="lg"
-                    className="w-full font-semibold"
+                    className="w-full font-black"
                     isLoading={isLoading}
                     rightIcon={<ArrowRight className="w-4 h-4" />}
                   >

@@ -50,18 +50,18 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
         {toasts.map((t) => (
           <div
             key={t.id}
-            className={`pointer-events-auto flex items-center justify-between p-3.5 rounded-xl shadow-lg border text-sm animate-in slide-in-from-bottom-5 duration-200 ${
+            className={`pointer-events-auto flex items-center justify-between p-3.5 rounded-2xl shadow-xl border text-sm animate-in slide-in-from-bottom-5 duration-200 ${
               t.type === 'success'
                 ? 'bg-white border-emerald-200 text-emerald-900 shadow-emerald-500/5'
                 : t.type === 'error'
                 ? 'bg-white border-rose-200 text-rose-900 shadow-rose-500/5'
-                : 'bg-white border-slate-200 text-slate-800 shadow-slate-500/5'
+                : 'bg-white border-indigo-100 text-indigo-800 shadow-indigo-500/5'
             }`}
           >
             <div className="flex items-center gap-2.5">
               {t.type === 'success' && <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />}
               {t.type === 'error' && <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />}
-              {t.type === 'info' && <Info className="w-4 h-4 text-slate-600 shrink-0" />}
+              {t.type === 'info' && <Info className="w-4 h-4 text-violet-600 shrink-0" />}
               <span className="font-medium text-xs sm:text-sm">{t.message}</span>
             </div>
             <button

@@ -88,7 +88,7 @@ export default function InvitePage() {
 
   if (error || !tripData) {
     return (
-      <div className="max-w-md mx-auto py-16 text-center space-y-4 bg-white p-8 rounded-3xl border border-slate-200/80 shadow-xs">
+      <div className="max-w-md mx-auto py-16 text-center space-y-4 bg-white/90 p-8 rounded-[2rem] border border-white shadow-xl shadow-indigo-100">
         <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center mx-auto">
           <AlertCircle className="w-6 h-6" />
         </div>
@@ -111,21 +111,22 @@ export default function InvitePage() {
   const loginRedirect = `/login?redirect=${encodeURIComponent(`/invite/${token}`)}&message=${encodeURIComponent(`You were invited to a trip to ${tripData.destination}! Log in so your friends know who you are`)}`;
 
   return (
-    <div className="py-8 flex items-center justify-center">
-      <div className="bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-8 shadow-sm max-w-md w-full mx-auto text-center">
+    <div className="py-8 flex items-center justify-center min-h-[58vh]">
+      <div className="bg-white/90 rounded-[2rem] border border-white p-6 sm:p-8 shadow-xl shadow-indigo-200/50 max-w-md w-full mx-auto text-center relative overflow-hidden">
+        <div className="absolute -top-5 -right-3 text-7xl opacity-10 rotate-12">🎉</div>
         <div className="mb-6">
-          <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto mb-3">
+          <div className="w-14 h-14 rounded-2xl bg-amber-100 text-violet-600 flex items-center justify-center mx-auto mb-4 shadow-sm rotate-[-6deg]">
             <Sparkles className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl font-bold text-slate-900">
-            You&apos;re invited to a trip!
+          <h2 className="text-2xl font-black text-indigo-950">
+            You&apos;re on the list!
           </h2>
-          <div className="mt-3 bg-slate-50 rounded-xl p-3 border border-slate-100">
-            <p className="text-lg font-bold text-slate-900">
+          <div className="mt-4 bg-linear-to-br from-violet-50 to-cyan-50 rounded-2xl p-4 border border-violet-100">
+            <p className="text-lg font-black text-indigo-950">
               {tripData.destination}
             </p>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Organized by <span className="font-semibold text-slate-700">{tripData.creatorName}</span>
+            <p className="text-xs text-indigo-500 mt-1">
+              Dreamed up by <span className="font-bold text-indigo-800">{tripData.creatorName}</span>
             </p>
           </div>
         </div>
@@ -133,13 +134,13 @@ export default function InvitePage() {
         {isAuthenticated && user ? (
           // Logged in — show "Jump in!" button
           <div className="space-y-3">
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-indigo-600">
               Ready to join, <span className="font-semibold">{user.name}</span>?
             </p>
             <Button
               variant="primary"
               size="lg"
-              className="w-full font-semibold"
+              className="w-full font-black"
               isLoading={isJoining}
               onClick={handleJoinTrip}
               rightIcon={<Rocket className="w-4 h-4" />}
@@ -150,14 +151,14 @@ export default function InvitePage() {
         ) : (
           // Not logged in — show sign-in prompt
           <div className="space-y-3">
-            <p className="text-sm text-slate-600">
-              But first, log in so your friends know who you are
+            <p className="text-sm text-indigo-600">
+              First, introduce yourself so the crew knows who just joined.
             </p>
             <Link href={loginRedirect} className="block">
               <Button
                 variant="primary"
                 size="lg"
-                className="w-full font-semibold"
+                className="w-full font-black"
                 rightIcon={<ArrowRight className="w-4 h-4" />}
               >
                 Sign In to Join

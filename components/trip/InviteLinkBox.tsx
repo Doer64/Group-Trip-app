@@ -38,8 +38,8 @@ export function InviteLinkBox({ inviteToken, destination }: InviteLinkBoxProps) 
 
   return (
     <div className="space-y-4 text-left">
-      <p className="text-xs text-slate-500">
-        Anyone with this link can join the trip group, propose attractions, and vote.
+      <p className="text-xs text-indigo-500">
+        Send this magic link to the crew—then the pitching and voting can begin.
       </p>
 
       {/* Copy link input row */}
@@ -48,7 +48,7 @@ export function InviteLinkBox({ inviteToken, destination }: InviteLinkBoxProps) 
           type="text"
           readOnly
           value={inviteUrl}
-          className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-700 font-mono select-all focus:outline-none"
+          className="flex-1 bg-violet-50 border border-violet-100 rounded-xl px-3.5 py-2.5 text-xs text-indigo-700 font-mono select-all focus:outline-none"
         />
         <Button
           size="sm"
@@ -61,13 +61,13 @@ export function InviteLinkBox({ inviteToken, destination }: InviteLinkBoxProps) 
       </div>
 
       {/* Share directly */}
-      <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
-        <span className="text-xs font-medium text-slate-600">Quick share:</span>
+      <div className="pt-2 border-t border-indigo-50 flex items-center justify-between">
+        <span className="text-xs font-bold text-indigo-600">Quick share:</span>
         <a
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 text-xs font-semibold transition-colors"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-100 text-xs font-bold transition-colors"
         >
           <MessageCircle className="w-3.5 h-3.5" />
           <span>Share to WhatsApp</span>

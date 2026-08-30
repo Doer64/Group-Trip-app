@@ -62,7 +62,7 @@ export function AttractionCard({
   };
 
   return (
-    <div className="group relative flex flex-col bg-white rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-all duration-200 overflow-hidden text-left">
+    <div className="group relative flex flex-col bg-white/90 rounded-3xl border border-indigo-100 shadow-sm shadow-indigo-100/70 hover:shadow-xl hover:shadow-indigo-200/40 hover:-translate-y-1 transition-all duration-200 overflow-hidden text-left">
       {/* Image Banner */}
       <div className="relative w-full h-48 bg-slate-100 overflow-hidden shrink-0">
         {attraction.image_url && !imageError ? (
@@ -74,15 +74,15 @@ export function AttractionCard({
             loading="lazy"
           />
         ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center bg-linear-to-br from-slate-100 to-slate-200 text-slate-400">
+        <div className="w-full h-full flex flex-col items-center justify-center bg-linear-to-br from-violet-100 to-cyan-100 text-indigo-400">
             <ImageOff className="w-8 h-8 mb-1.5 opacity-60" />
             <span className="text-[11px] font-medium tracking-wide">No preview image</span>
           </div>
         )}
 
         {/* Proposer Badge */}
-        <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-slate-900/70 backdrop-blur-md px-2.5 py-1 rounded-full text-white text-[11px] font-medium shadow-xs">
-          <User className="w-3 h-3 text-slate-300" />
+        <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-indigo-950/75 backdrop-blur-md px-2.5 py-1 rounded-full text-white text-[11px] font-bold shadow-sm">
+          <User className="w-3 h-3 text-amber-200" />
           <span className="truncate max-w-[120px]">{attraction.added_by_name || 'Member'}</span>
         </div>
 
@@ -92,7 +92,7 @@ export function AttractionCard({
             type="button"
             onClick={handleDelete}
             disabled={isDeleting}
-            className="absolute top-3 right-3 p-1.5 rounded-full bg-white/90 text-slate-500 hover:text-rose-600 hover:bg-white shadow-xs transition-all cursor-pointer opacity-80 group-hover:opacity-100"
+            className="absolute top-3 right-3 p-1.5 rounded-full bg-white/90 text-indigo-400 hover:text-rose-600 hover:bg-white shadow-sm transition-all cursor-pointer opacity-80 group-hover:opacity-100"
             title="Remove attraction"
             aria-label="Remove attraction"
           >
@@ -104,25 +104,25 @@ export function AttractionCard({
       {/* Card Content */}
       <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
         <div>
-          <h4 className="text-base font-bold text-slate-900 line-clamp-1 group-hover:text-indigo-600 transition-colors">
+          <h4 className="text-base font-black text-indigo-950 line-clamp-1 group-hover:text-violet-600 transition-colors">
             {attraction.name}
           </h4>
 
           {attraction.description && (
-            <p className="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">
+            <p className="text-xs text-indigo-500 mt-1 line-clamp-2 leading-relaxed">
               {attraction.description}
             </p>
           )}
         </div>
 
         {/* Card Footer: Maps Link + Vote Buttons */}
-        <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+        <div className="mt-4 pt-3 border-t border-indigo-50 flex items-center justify-between gap-2">
           {mapsUrl ? (
             <a
               href={mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-8 h-8 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white flex items-center justify-center shadow-xs transition-all hover:shadow cursor-pointer shrink-0"
+              className="w-8 h-8 rounded-xl bg-cyan-500 hover:bg-cyan-600 active:scale-95 text-white flex items-center justify-center shadow-sm transition-all hover:shadow cursor-pointer shrink-0"
               title="Open in Google Maps"
               aria-label="Open in Google Maps"
             >
@@ -130,7 +130,7 @@ export function AttractionCard({
             </a>
           ) : (
             <div
-              className="w-8 h-8 rounded-xl bg-slate-100 text-slate-300 flex items-center justify-center cursor-not-allowed shrink-0"
+              className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-200 flex items-center justify-center cursor-not-allowed shrink-0"
               title="Location unavailable"
               aria-label="Location unavailable"
             >

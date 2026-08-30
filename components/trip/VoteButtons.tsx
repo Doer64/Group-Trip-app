@@ -22,7 +22,7 @@ export function VoteButtons({
   const isDisliked = myVote === 'dislike';
 
   return (
-    <div className="flex items-center gap-2 bg-slate-50/80 p-1.5 rounded-xl border border-slate-100">
+    <div className="flex items-center gap-2 bg-indigo-50/70 p-1.5 rounded-2xl border border-indigo-100">
       {/* Upvote Button */}
       <button
         type="button"
@@ -30,8 +30,8 @@ export function VoteButtons({
         onClick={() => onVote('like')}
         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 cursor-pointer active:scale-95 disabled:cursor-not-allowed ${
           isLiked
-            ? 'bg-emerald-500 text-white shadow-xs'
-            : 'bg-white text-slate-600 hover:text-emerald-600 hover:bg-emerald-50/60 border border-slate-200/80'
+            ? 'bg-emerald-500 text-white shadow-md shadow-emerald-200'
+            : 'bg-white text-indigo-600 hover:text-emerald-600 hover:bg-emerald-50/60 border border-indigo-100'
         }`}
         title={isLiked ? 'Remove like' : 'Vote like'}
         aria-label={`Like (${likes} votes)`}
@@ -47,8 +47,8 @@ export function VoteButtons({
         onClick={() => onVote('dislike')}
         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 cursor-pointer active:scale-95 disabled:cursor-not-allowed ${
           isDisliked
-            ? 'bg-rose-500 text-white shadow-xs'
-            : 'bg-white text-slate-600 hover:text-rose-600 hover:bg-rose-50/60 border border-slate-200/80'
+            ? 'bg-rose-500 text-white shadow-md shadow-rose-200'
+            : 'bg-white text-indigo-600 hover:text-rose-600 hover:bg-rose-50/60 border border-indigo-100'
         }`}
         title={isDisliked ? 'Remove dislike' : 'Vote dislike'}
         aria-label={`Dislike (${dislikes} votes)`}
