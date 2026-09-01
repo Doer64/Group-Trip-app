@@ -169,69 +169,71 @@ export function DestinationInput({
 
       {/* Floating Auto-suggestions Dropdown */}
       {shouldShowDropdown && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl shadow-slate-900/10 border border-slate-200 py-1.5 z-50 overflow-hidden max-h-72 overflow-y-auto animate-in fade-in duration-150">
-          <div className="px-3.5 py-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">
-            Suggested Destinations
-          </div>
+        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl shadow-slate-900/10 border border-slate-200 z-50 overflow-hidden animate-in fade-in duration-150">
+          <div className="max-h-72 overflow-y-auto py-1.5">
+            <div className="px-3.5 py-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+              Suggested Destinations
+            </div>
 
-          <div className="divide-y divide-slate-100">
-            {suggestions.map((item, index) => {
-              const isSelected = highlightedIndex === index;
-              const isCity = item.type === 'city';
+            <div className="divide-y divide-slate-100">
+              {suggestions.map((item, index) => {
+                const isSelected = highlightedIndex === index;
+                const isCity = item.type === 'city';
 
-              return (
-                <div
-                  key={`${item.name}-${item.country}-${index}`}
-                  onMouseDown={(e) => {
-                    e.preventDefault();
-                    selectSuggestion(item);
-                  }}
-                  onMouseEnter={() => setHighlightedIndex(index)}
-                  className={`px-3.5 py-2.5 flex items-center justify-between gap-3 cursor-pointer transition-colors ${
-                    isSelected
-                      ? 'bg-blue-50 text-blue-900'
-                      : 'hover:bg-slate-50 text-slate-800'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <div
-                      className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
-                        isSelected
-                          ? 'bg-blue-100 text-blue-700'
-                          : 'bg-slate-100 text-slate-500'
-                      }`}
-                    >
-                      {isCity ? (
-                        <Building2 className="w-3.5 h-3.5" />
-                      ) : (
-                        <Globe className="w-3.5 h-3.5" />
-                      )}
-                    </div>
-
-                    <div className="truncate">
-                      <span className="text-sm font-semibold block truncate">
-                        {item.name}
-                      </span>
-                      {isCity && item.country && item.country !== item.name && (
-                        <span className="text-xs text-slate-400 block truncate">
-                          {item.country}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  <span
-                    className={`text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 uppercase tracking-wider ${
-                      isCity
-                        ? 'bg-slate-100 text-slate-600'
-                        : 'bg-blue-50 text-blue-700'
+                return (
+                  <div
+                    key={`${item.name}-${item.country}-${index}`}
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      selectSuggestion(item);
+                    }}
+                    onMouseEnter={() => setHighlightedIndex(index)}
+                    className={`px-3.5 py-2.5 flex items-center justify-between gap-3 cursor-pointer transition-colors ${
+                      isSelected
+                        ? 'bg-blue-50 text-blue-900'
+                        : 'hover:bg-slate-50 text-slate-800'
                     }`}
                   >
-                    {item.type}
-                  </span>
-                </div>
-              );
-            })}
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div
+                        className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
+                          isSelected
+                            ? 'bg-blue-100 text-blue-700'
+                            : 'bg-slate-100 text-slate-500'
+                        }`}
+                      >
+                        {isCity ? (
+                          <Building2 className="w-3.5 h-3.5" />
+                        ) : (
+                          <Globe className="w-3.5 h-3.5" />
+                        )}
+                      </div>
+
+                      <div className="truncate">
+                        <span className="text-sm font-semibold block truncate">
+                          {item.name}
+                        </span>
+                        {isCity && item.country && item.country !== item.name && (
+                          <span className="text-xs text-slate-400 block truncate">
+                            {item.country}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <span
+                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 uppercase tracking-wider ${
+                        isCity
+                          ? 'bg-slate-100 text-slate-600'
+                          : 'bg-blue-50 text-blue-700'
+                      }`}
+                    >
+                      {item.type}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       )}

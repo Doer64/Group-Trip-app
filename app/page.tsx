@@ -373,7 +373,7 @@ export default function HomePage() {
       {/* Side-by-Side Departure Gates */}
       <div className="relative flex flex-col md:flex-row items-stretch justify-center gap-5 pt-2">
         {/* Left Card: Create Trip */}
-        <div className="flex-1 bg-white/95 p-6 sm:p-8 rounded-[2rem] border border-slate-200 shadow-xl shadow-slate-900/5 text-left flex flex-col justify-between relative overflow-hidden">
+        <div className="flex-1 bg-white/95 p-6 sm:p-8 rounded-[2rem] border border-slate-200 shadow-xl shadow-slate-900/5 text-left flex flex-col justify-between relative z-20 overflow-visible focus-within:z-30">
           <form onSubmit={handleLoggedOutCreate} className="space-y-5">
             <div>
               <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-3">
@@ -420,7 +420,7 @@ export default function HomePage() {
         </div>
 
         {/* Right Card: Join Trip */}
-        <div className="flex-1 bg-white/95 p-6 sm:p-8 rounded-[2rem] border border-slate-200 shadow-xl shadow-slate-900/5 text-left flex flex-col justify-between relative overflow-hidden">
+        <div className="flex-1 bg-white/95 p-6 sm:p-8 rounded-[2rem] border border-slate-200 shadow-xl shadow-slate-900/5 text-left flex flex-col justify-between relative z-10 overflow-visible focus-within:z-30">
           <form
             onSubmit={(e) => {
               e.preventDefault();
