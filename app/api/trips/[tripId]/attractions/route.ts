@@ -152,7 +152,19 @@ export async function POST(
       ? { placeUri }
       : null;
 
-    // 2. Insert attraction
+    // 2. Check for duplicate attraction by name within the same trip
+    const { data: existingByName } = await supabase
+      .from('attractions')
+      .select('id')
+      .eq('trip_id', tripId)
+      .ilike('name', name.trim())
+      .maybeSingle();
+
+    if (existingByName) {
+      return jsonError('Place already in trip', 409, 'ALREADY_EXISTS');
+    }
+
+    // 3. Insert attraction
     const { data: attraction, error: insertError } = await supabase
       .from('attractions')
       .insert({
