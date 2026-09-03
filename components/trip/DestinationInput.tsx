@@ -31,6 +31,7 @@ export function DestinationInput({
   const [isPending, startTransition] = React.useTransition();
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const isSelectingRef = useRef(false);
 
   // Trigger search on value change without blocking typing
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,6 +46,10 @@ export function DestinationInput({
 
   const handleFocus = () => {
     ensureDataLoaded();
+    if (isSelectingRef.current) {
+      isSelectingRef.current = false;
+      return;
+    }
     if (value.trim().length >= 2) {
       search(value);
       setIsOpen(true);
@@ -59,6 +64,7 @@ export function DestinationInput({
           ? `${entry.name}, ${entry.country}`
           : entry.name;
 
+      isSelectingRef.current = true;
       onChange(formattedValue);
       clearSuggestions();
       setIsOpen(false);
